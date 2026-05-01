@@ -303,6 +303,19 @@ h3 {
   border-top: 1px solid var(--line);
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 640ms ease,
+    transform 640ms ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .hero {
   border-top: 4px solid var(--accent-strong);
 }
@@ -372,7 +385,6 @@ h3 {
     border-color 180ms ease,
     transform 180ms ease,
     background-color 180ms ease;
-  animation: riseIn 680ms ease both;
 }
 
 .project-card:hover {
@@ -497,18 +509,6 @@ h3 {
   }
 }
 
-@keyframes riseIn {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (max-width: 800px) {
   .hero-layout,
   .two-column,
@@ -582,5 +582,10 @@ h3 {
     animation-duration: 1ms !important;
     scroll-behavior: auto !important;
     transition-duration: 1ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }

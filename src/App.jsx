@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const focusItems = [
   {
     index: "01",
@@ -64,8 +66,8 @@ const projectItems = [
     meta: "Visualization",
     title: "Market Investment Visualization",
     description:
-      "A concise EDA and visualization project presenting market and investment patterns through a published Quarto report.",
-    tags: ["EDA", "Quarto", "Visualization"],
+      "Publication-style venture analytics report on Crunchbase startup outcomes, built around censoring-aware interpretation, funding ladders, cohort structure, and market exit fingerprints.",
+    tags: ["EDA", "Kaggle-style", "SVG report"],
     href: "https://github.com/rf2960/market-investment-visualization",
     secondaryHref: "https://rf2960.github.io/market-investment-visualization/",
     action: "View repo",
@@ -133,6 +135,25 @@ function GitHubIcon() {
 export default function App() {
   const photoUrl = `${import.meta.env.BASE_URL}ruochen-photo.jpg`;
   const resumeUrl = `${import.meta.env.BASE_URL}Feng_Resume.pdf`;
+
+  useEffect(() => {
+    const targets = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.16 },
+    );
+
+    targets.forEach((target) => observer.observe(target));
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="site-shell">
@@ -206,7 +227,7 @@ export default function App() {
       </header>
 
       <main className="content">
-        <section className="section about-section" id="about">
+        <section className="section about-section reveal" id="about">
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">About</p>
@@ -233,7 +254,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section focus-section" id="focus">
+        <section className="section focus-section reveal" id="focus">
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">Work</p>
@@ -241,7 +262,7 @@ export default function App() {
             </div>
             <div className="focus-grid">
               {focusItems.map((item) => (
-                <article className="focus-item" key={item.title}>
+                <article className="focus-item reveal" key={item.title}>
                   <p className="focus-index">{item.index}</p>
                   <h3>{item.title}</h3>
                   <p>{item.description}</p>
@@ -251,7 +272,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section projects-section" id="projects">
+        <section className="section projects-section reveal" id="projects">
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">Projects</p>
@@ -260,7 +281,7 @@ export default function App() {
             <div className="project-grid">
               {projectItems.map((item) => (
                 <article
-                  className={`project-card${item.featured ? " featured" : ""}`}
+                  className={`project-card reveal${item.featured ? " featured" : ""}`}
                   key={item.title}
                 >
                   <p className="project-meta">{item.meta}</p>
@@ -297,7 +318,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section publication-section" id="publications">
+        <section className="section publication-section reveal" id="publications">
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">Publications</p>
@@ -325,7 +346,7 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section contact-section" id="contact">
+        <section className="section contact-section reveal" id="contact">
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">Contact</p>
