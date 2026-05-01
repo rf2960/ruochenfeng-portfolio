@@ -19,6 +19,82 @@ const focusItems = [
   },
 ];
 
+const projectItems = [
+  {
+    meta: "Flagship ML",
+    title: "Pancreas H&E Pathology AI",
+    description:
+      "End-to-end computer vision workflow for pancreatic H&E tile classification, including QuPath annotation export, slide-held-out validation, threshold tuning, and public model documentation.",
+    tags: ["PyTorch", "QuPath", "Medical CV"],
+    href: "https://github.com/rf2960/pancreas-he-pathology",
+    action: "View repo",
+    featured: true,
+  },
+  {
+    meta: "Research Tool",
+    title: "StarDist Nuclear Segmentation",
+    description:
+      "Scale-aware StarDist pipeline and interactive TMA viewer for reviewing nuclei, spatial core structure, dense patches, and segmentation behavior across H&E tissue microarrays.",
+    tags: ["StarDist", "OpenSlide", "HTML viewer"],
+    href: "https://github.com/rf2960/stardist-nuclear-segmentation",
+    secondaryHref: `${import.meta.env.BASE_URL}stardist-tma-viewer.html`,
+    action: "View repo",
+    secondaryAction: "Open viewer",
+    featured: true,
+  },
+  {
+    meta: "Finance RAG",
+    title: "FinSight RAG",
+    description:
+      "Evidence-grounded financial news analysis demo with a Streamlit research interface, signal schema, citation audit trail, and evaluation plan for short-horizon market signals.",
+    tags: ["RAG", "Streamlit", "Evaluation"],
+    href: "https://github.com/rf2960/finance-news-analyzer",
+    action: "View repo",
+  },
+  {
+    meta: "Agentic AI",
+    title: "TravelMind Planner",
+    description:
+      "Multi-stage LLM travel planner with destination discovery, existing-plan refinement, product screenshots, demo video, and architecture artifacts for a recruiter-friendly project walkthrough.",
+    tags: ["LLM agents", "Product design", "Architecture"],
+    href: "https://github.com/rf2960/travelmind-planner",
+    action: "View repo",
+  },
+  {
+    meta: "Visualization",
+    title: "Market Investment Visualization",
+    description:
+      "A concise EDA and visualization project presenting market and investment patterns through a published Quarto report.",
+    tags: ["EDA", "Quarto", "Visualization"],
+    href: "https://github.com/rf2960/market-investment-visualization",
+    secondaryHref: "https://rf2960.github.io/market-investment-visualization/",
+    action: "View repo",
+    secondaryAction: "Open report",
+  },
+  {
+    meta: "Lab Tool - In Revision",
+    title: "Organoid Counter",
+    description:
+      "SegFormer-based organoid counting tool copied from mentor lab work and currently waiting for your own revision around code ownership, manuscript positioning, and documentation.",
+    tags: ["SegFormer", "Bioimage", "In progress"],
+    href: "https://github.com/rf2960/organoid-counter",
+    action: "View repo",
+  },
+];
+
+const toolkitItems = [
+  "Python",
+  "SQL",
+  "PyTorch",
+  "scikit-learn",
+  "TensorFlow",
+  "Spark",
+  "Kafka",
+  "AWS/GCP",
+  "Tableau",
+  "StarDist",
+];
+
 const publications = [
   {
     title:
@@ -57,7 +133,6 @@ function GitHubIcon() {
 export default function App() {
   const photoUrl = `${import.meta.env.BASE_URL}ruochen-photo.jpg`;
   const resumeUrl = `${import.meta.env.BASE_URL}Feng_Resume.pdf`;
-  const viewerUrl = `${import.meta.env.BASE_URL}stardist-tma-viewer.html`;
 
   return (
     <div className="site-shell">
@@ -88,12 +163,12 @@ export default function App() {
           <div className="hero-content">
             <div className="hero-layout">
               <div className="hero-copy">
-                <p className="eyebrow">Personal Website</p>
+                <p className="eyebrow">Data science portfolio</p>
                 <h1>Ruochen Feng</h1>
                 <p className="intro">
-                  Data science graduate student at Columbia University, working
-                  across machine learning research, forecasting, quantitative
-                  analysis, and data systems.
+                  M.S. Data Science student at Columbia University building
+                  machine learning systems for forecasting, biomedical image
+                  analysis, evidence-grounded AI, and decision-focused analytics.
                 </p>
                 <div className="hero-actions">
                   <a className="button button-primary" href="#focus">
@@ -118,6 +193,12 @@ export default function App() {
                   src={photoUrl}
                   alt="Portrait of Ruochen Feng"
                 />
+                <div className="signal-panel" aria-hidden="true">
+                  <span>forecasting</span>
+                  <span>pathology ML</span>
+                  <span>RAG systems</span>
+                  <span>visual analytics</span>
+                </div>
               </div>
             </div>
           </div>
@@ -144,6 +225,11 @@ export default function App() {
                 raw data into usable insight.
               </p>
             </div>
+            <div className="toolkit-row" aria-label="Technical toolkit">
+              {toolkitItems.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -169,58 +255,44 @@ export default function App() {
           <div className="content-width">
             <div className="section-heading">
               <p className="section-label">Projects</p>
-              <h2>Selected work with something concrete to open.</h2>
+              <h2>Portfolio projects with evidence to inspect.</h2>
             </div>
             <div className="project-grid">
-              <article className="project-card">
-                <p className="project-meta">Research Tool</p>
-                <h3>StarDist TMA Viewer</h3>
-                <p>
-                  An interactive HTML viewer for histopathology TMA analysis,
-                  built to inspect segmented cells, compare cores, filter by
-                  area, and jump into dense patches for closer review.
-                </p>
-                <ul className="project-points">
-                  <li>Patch-level and core-level exploration in one interface</li>
-                  <li>Built around StarDist segmentation outputs and spatial features</li>
-                  <li>Designed to make model behavior and tissue structure easier to inspect</li>
-                </ul>
-                <div className="project-actions">
-                  <a
-                    className="button button-secondary"
-                    href={viewerUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Open viewer
-                  </a>
-                </div>
-              </article>
-
-              <article className="project-card">
-                <p className="project-meta">LLM System Design</p>
-                <h3>TravelMind</h3>
-                <p>
-                  A travel-planning project centered on multi-stage reasoning,
-                  progressive refinement, and an interface that moves from open
-                  input to structured itinerary output.
-                </p>
-                <ul className="project-points">
-                  <li>Two flows: destination discovery and existing-plan enhancement</li>
-                  <li>Combines product thinking, LLM workflow design, and interface clarity</li>
-                  <li>Documented with screenshots, demo video, and architecture artifacts</li>
-                </ul>
-                <div className="project-actions">
-                  <a
-                    className="button button-secondary"
-                    href="https://github.com/rf2960/TravelMind"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View repo
-                  </a>
-                </div>
-              </article>
+              {projectItems.map((item) => (
+                <article
+                  className={`project-card${item.featured ? " featured" : ""}`}
+                  key={item.title}
+                >
+                  <p className="project-meta">{item.meta}</p>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <div className="tag-row">
+                    {item.tags.map((tag) => (
+                      <span key={tag}>{tag}</span>
+                    ))}
+                  </div>
+                  <div className="project-actions">
+                    <a
+                      className="button button-secondary"
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {item.action}
+                    </a>
+                    {item.secondaryHref && (
+                      <a
+                        className="button button-quiet"
+                        href={item.secondaryHref}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {item.secondaryAction}
+                      </a>
+                    )}
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
