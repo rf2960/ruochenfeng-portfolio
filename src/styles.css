@@ -188,9 +188,7 @@ h3 {
 .focus-item p,
 .contact-copy,
 .project-card p,
-.project-points,
-.resume-copy p,
-.resume-highlight p {
+.project-points {
   color: var(--muted);
   line-height: 1.7;
   font-size: 1rem;
@@ -430,51 +428,6 @@ h3 {
   margin-top: 1.5rem;
 }
 
-.resume-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
-  gap: 2rem;
-  align-items: start;
-  margin-top: 1.5rem;
-}
-
-.resume-copy {
-  position: sticky;
-  top: 2rem;
-  padding-top: 0.25rem;
-}
-
-.resume-copy p {
-  margin: 0 0 1.5rem;
-}
-
-.resume-highlights {
-  display: grid;
-  gap: 1rem;
-}
-
-.resume-highlight {
-  padding: 1.15rem 0 1.25rem;
-  border-top: 1px solid var(--line);
-}
-
-.resume-highlight h3 {
-  margin-bottom: 0.65rem;
-}
-
-.resume-highlight p {
-  margin: 0;
-}
-
-.resume-label {
-  margin: 0 0 0.7rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--cyan);
-}
-
 .focus-item {
   padding: 0;
   border-top: 1px solid var(--line);
@@ -607,13 +560,8 @@ h3 {
   .hero-layout,
   .two-column,
   .focus-grid,
-  .resume-layout,
   .project-grid {
     grid-template-columns: 1fr;
-  }
-
-  .resume-copy {
-    position: static;
   }
 
   .publication-item {

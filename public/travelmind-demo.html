@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TravelMind Product Demo</title>
+  <style>
+    :root {
+      --bg: #050806;
+      --panel: #0c1510;
+      --panel-2: #101c15;
+      --text: #eef6ef;
+      --muted: #9baa9f;
+      --line: #1f3525;
+      --accent: #78f0a1;
+      --cyan: #7dd3fc;
+      --amber: #f4c96b;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Manrope, "Segoe UI", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(rgba(120, 240, 161, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 211, 252, 0.025) 1px, transparent 1px),
+        linear-gradient(180deg, var(--bg), #0b130d);
+      background-size: 42px 42px, 42px 42px, auto;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 40px 0 72px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 56px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+      gap: 28px;
+      align-items: end;
+    }
+
+    .eyebrow,
+    .meta {
+      margin: 0 0 14px;
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.04;
+    }
+
+    h1 {
+      max-width: 720px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    h3 {
+      font-size: 1.08rem;
+    }
+
+    p {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .intro {
+      max-width: 620px;
+      font-size: 1.04rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 26px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0.8rem 1.15rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-weight: 800;
+    }
+
+    .button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: #041006;
+    }
+
+    .button.secondary:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+
+    .video-shell {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #08100b;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #020403;
+    }
+
+    section {
+      margin-top: 72px;
+    }
+
+    .grid,
+    .shot-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .shot-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .card,
+    .shot {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.014)),
+        var(--panel);
+    }
+
+    .card {
+      padding: 20px;
+    }
+
+    .card p {
+      margin-bottom: 0;
+    }
+
+    .shot {
+      overflow: hidden;
+    }
+
+    .shot img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1.55 / 1;
+      object-fit: cover;
+      object-position: top center;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .shot div {
+      padding: 16px;
+    }
+
+    .shot p {
+      margin: 0.5rem 0 0;
+      font-size: 0.92rem;
+    }
+
+    .note {
+      margin-top: 20px;
+      color: var(--amber);
+      font-size: 0.94rem;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .grid,
+      .shot-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <nav class="nav">
+      <a href="./">Ruochen Feng</a>
+      <a href="https://github.com/rf2960/travelmind-planner" target="_blank" rel="noreferrer">GitHub repo</a>
+    </nav>
+
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Agentic AI / product walkthrough</p>
+        <h1>TravelMind planner demo.</h1>
+        <p class="intro">
+          A portfolio walkthrough for a multi-agent LLM travel-planning concept.
+          The project demonstrates destination discovery, existing-plan refinement,
+          structured itinerary generation, and product-oriented system design.
+        </p>
+        <div class="actions">
+          <a class="button primary" href="#demo">Watch walkthrough</a>
+          <a class="button secondary" href="https://github.com/rf2960/travelmind-planner" target="_blank" rel="noreferrer">View repository</a>
+        </div>
+        <p class="note">
+          This page is a hosted product demo from repository assets, not a live runnable app.
+        </p>
+      </div>
+
+      <div class="video-shell" id="demo">
+        <video controls preload="metadata" poster="./travelmind/discover_result.png">
+          <source src="./travelmind/TravelMind_demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </header>
+
+    <section>
+      <p class="eyebrow">System concept</p>
+      <h2>What the demo shows</h2>
+      <div class="grid">
+        <article class="card">
+          <p class="meta">01</p>
+          <h3>Constraint parsing</h3>
+          <p>User intent, dates, budget, pace, and preferences are normalized before planning.</p>
+        </article>
+        <article class="card">
+          <p class="meta">02</p>
+          <h3>Agent routing</h3>
+          <p>Discovery and plan-enhancement flows are separated so each mode can use specialized logic.</p>
+        </article>
+        <article class="card">
+          <p class="meta">03</p>
+          <h3>Structured output</h3>
+          <p>The product returns readable itineraries, warnings, assumptions, scores, and next-step refinements.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <p class="eyebrow">Product screens</p>
+      <h2>Two user flows.</h2>
+      <div class="shot-grid">
+        <article class="shot">
+          <img src="./travelmind/discover_interface.png" alt="TravelMind destination discovery input interface" />
+          <div>
+            <h3>Discovery input</h3>
+            <p>Users enter flexible trip preferences when they need destination recommendations.</p>
+          </div>
+        </article>
+        <article class="shot">
+          <img src="./travelmind/discover_result.png" alt="TravelMind destination discovery result" />
+          <div>
+            <h3>Discovery result</h3>
+            <p>The planner returns ranked options with structured trip reasoning and practical guidance.</p>
+          </div>
+        </article>
+        <article class="shot">
+          <img src="./travelmind/plan_interface.png" alt="TravelMind existing plan enhancement interface" />
+          <div>
+            <h3>Plan enhancement input</h3>
+            <p>Users can paste an existing rough plan and ask for improvements.</p>
+          </div>
+        </article>
+        <article class="shot">
+          <img src="./travelmind/plan_result.png" alt="TravelMind enhanced plan result" />
+          <div>
+            <h3>Enhanced itinerary</h3>
+            <p>The output improves pacing, detail, warnings, and itinerary structure.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

@@ -21,30 +21,6 @@ const focusItems = [
   },
 ];
 
-const resumeHighlights = [
-  {
-    label: "Recruiter signal",
-    title: "Google Maps forecasting",
-    body:
-      "Incoming Data Scientist Intern selected for Navigation Trips work, focused on trip-demand forecasting, model evaluation, performance optimization, and product-facing insight delivery.",
-    details: ["Time-series ML", "Regression baselines", "Gemini summaries"],
-  },
-  {
-    label: "Industry impact",
-    title: "Data systems plus analytics",
-    body:
-      "Built reporting and analysis workflows across AWS, Spark, Kafka, SQL, Tableau, and Python, including 100K+ product records, ~10M+ risk records, and measurable adoption / accuracy gains.",
-    details: ["50% faster reports", "17.3% SMB adoption lift", "21.4% forecast accuracy gain"],
-  },
-  {
-    label: "Applied ML depth",
-    title: "Biomedical computer vision",
-    body:
-      "Developed H&E image-analysis pipelines using PyTorch, scikit-learn, StarDist, and interactive QA tooling to connect research-grade model work with inspectable outputs.",
-    details: ["43,213 tiles", "5 tissue classes", "80K+ nuclear masks"],
-  },
-];
-
 const projectItems = [
   {
     meta: "Flagship ML",
@@ -81,10 +57,12 @@ const projectItems = [
     meta: "Agentic AI",
     title: "TravelMind Planner",
     description:
-      "Multi-stage LLM travel planner with destination discovery, existing-plan refinement, product screenshots, demo video, and architecture artifacts for a recruiter-friendly project walkthrough.",
+      "Multi-agent LLM travel-planning concept with destination discovery, existing-plan refinement, product screenshots, demo video, and architecture artifacts for a recruiter-friendly walkthrough.",
     tags: ["LLM agents", "Product design", "Architecture"],
     href: "https://github.com/rf2960/travelmind-planner",
+    secondaryHref: `${import.meta.env.BASE_URL}travelmind-demo.html`,
     action: "View repo",
+    secondaryAction: "Watch demo",
   },
   {
     meta: "Visualization",
@@ -247,7 +225,6 @@ export default function App() {
         <a href="#top" aria-label="Intro" />
         <a href="#about" aria-label="About" />
         <a href="#focus" aria-label="Work" />
-        <a href="#resume" aria-label="Resume" />
         <a href="#projects" aria-label="Projects" />
         <a href="#publications" aria-label="Publications" />
         <a href="#contact" aria-label="Contact" />
@@ -260,7 +237,6 @@ export default function App() {
               <div className="nav-links">
                 <a href="#about">About</a>
                 <a href="#focus">Work</a>
-                <a href="#resume">Resume</a>
                 <a href="#projects">Projects</a>
                 <a href="#publications">Publications</a>
                 <a href="#contact">Contact</a>
@@ -357,46 +333,6 @@ export default function App() {
                   <p>{item.description}</p>
                 </article>
               ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section resume-section reveal" id="resume">
-          <div className="content-width">
-            <div className="section-heading">
-              <p className="section-label">Resume</p>
-              <h2>Current recruiting snapshot.</h2>
-            </div>
-            <div className="resume-layout">
-              <div className="resume-copy">
-                <p>
-                  The latest resume now leads with Columbia Data Science and an
-                  incoming Google Maps Data Scientist Internship, then backs it
-                  with measurable internship outcomes and research-grade ML work.
-                </p>
-                <a
-                  className="button button-primary"
-                  href={resumeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open latest resume
-                </a>
-              </div>
-              <div className="resume-highlights">
-                {resumeHighlights.map((item) => (
-                  <article className="resume-highlight" key={item.title}>
-                    <p className="resume-label">{item.label}</p>
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                    <div className="tag-row">
-                      {item.details.map((detail) => (
-                        <span key={detail}>{detail}</span>
-                      ))}
-                    </div>
-                  </article>
-                ))}
-              </div>
             </div>
           </div>
         </section>
