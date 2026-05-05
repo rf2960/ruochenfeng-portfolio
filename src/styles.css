@@ -101,15 +101,15 @@ img {
   left: max(1rem, calc((100vw - var(--max)) / 2));
   top: 1rem;
   z-index: 50;
-  display: grid;
-  gap: 0;
-  padding: 0.2rem 0.3rem;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.28rem 0.34rem;
   background: transparent;
   color: var(--ink);
-  font-family: "Fraunces", Georgia, serif;
-  font-size: 1.04rem;
-  font-weight: 650;
-  line-height: 0.94;
+  font-size: 0.82rem;
+  font-weight: 850;
+  line-height: 1;
   opacity: calc(var(--intro-progress) * 1.15);
   transform: translateY(calc((1 - var(--intro-progress)) * -16px));
   transition: color 240ms ease;
@@ -167,6 +167,22 @@ img {
   background: rgba(23, 22, 20, 0.075);
 }
 
+.logo-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid rgba(23, 22, 20, 0.18);
+  border-radius: 8px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
 .stage {
   position: relative;
   width: min(var(--max), calc(100% - 2rem));
@@ -188,6 +204,10 @@ img {
     translateY(calc(var(--intro-progress) * -6vh))
     scale(calc(1 - var(--intro-progress) * 0.08));
   transition: transform 80ms linear;
+}
+
+.hero-name-wrap > .logo-mark {
+  margin-bottom: 1rem;
 }
 
 .stage-kicker,
@@ -262,15 +282,15 @@ img {
   }
 }
 
-.thinking-stage {
+.about-stage {
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
   gap: 4rem;
   align-items: start;
   min-height: 100svh;
 }
 
-.thinking-intro {
+.about-intro {
   position: sticky;
   top: 7rem;
 }
@@ -297,12 +317,35 @@ p {
   line-height: 1.72;
 }
 
-.thinking-intro p,
+.about-intro p,
 .work-heading p,
 .worlds-copy p,
 .ending-card p {
   max-width: 640px;
   font-size: 1.08rem;
+}
+
+.about-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.about-notes {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.about-note {
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.about-note h3 {
+  font-size: 1.18rem;
+}
+
+.about-note p {
+  margin-bottom: 0;
 }
 
 .principle-track {
@@ -341,22 +384,70 @@ p {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 0.48fr);
   gap: 2rem;
   align-items: end;
-  margin-bottom: 2rem;
+  margin-bottom: 1.2rem;
 }
 
-.work-stack {
-  display: grid;
-  gap: 1rem;
+.work-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+}
+
+.work-controls button {
+  min-height: 38px;
+  padding: 0.45rem 0.72rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.72);
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 840;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.work-controls button:hover {
+  border-color: var(--line-strong);
+  background: #fffdf8;
+  transform: translateY(-1px);
+}
+
+.work-controls span,
+.work-current {
+  color: var(--soft);
+  font-size: 0.76rem;
+  font-weight: 850;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.work-carousel {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.work-rail {
+  display: flex;
+  width: 100%;
+  transition: transform 520ms cubic-bezier(0.22, 0.72, 0.22, 1);
+  will-change: transform;
+}
+
+.work-slide {
+  flex: 0 0 100%;
+  min-width: 0;
 }
 
 .work-card {
-  position: sticky;
-  top: calc(5rem + var(--card-index) * 0.6rem);
   display: grid;
-  grid-template-columns: 70px minmax(0, 0.92fr) minmax(280px, 0.88fr);
-  gap: 1.2rem;
+  grid-template-columns: 68px minmax(0, 0.86fr) minmax(320px, 0.92fr);
+  gap: 1rem;
   align-items: stretch;
-  min-height: 360px;
+  min-height: 430px;
   width: 100%;
   padding: 1rem;
   border: 1px solid var(--line);
@@ -409,6 +500,8 @@ p {
 
 .work-image {
   overflow: hidden;
+  align-self: center;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #e7e1d7;
@@ -418,7 +511,6 @@ p {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 310px;
   object-fit: cover;
   transform: scale(1.01);
   transition: transform 700ms ease;
@@ -426,6 +518,33 @@ p {
 
 .work-card:hover .work-image img {
   transform: scale(1.045);
+}
+
+.work-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.42rem;
+  margin-top: 1rem;
+}
+
+.work-dots button {
+  width: 2.2rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: rgba(23, 22, 20, 0.16);
+  transition:
+    width 180ms ease,
+    background-color 180ms ease;
+}
+
+.work-dots button.active {
+  width: 3.4rem;
+  background: var(--ink);
+}
+
+.work-current {
+  margin: 0.75rem 0 0;
+  text-align: center;
 }
 
 .focus-layer {
@@ -514,13 +633,21 @@ p {
   font-size: 4.6rem;
 }
 
-.focus-hero img {
-  width: 100%;
-  max-height: 440px;
-  object-fit: cover;
+.focus-media {
+  display: block;
+  overflow: hidden;
+  align-self: end;
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #e7e1d7;
+}
+
+.focus-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .focus-actions {
@@ -614,7 +741,7 @@ p {
 
 .focus-gallery img {
   width: 100%;
-  aspect-ratio: 1.45 / 1;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -718,25 +845,8 @@ p {
   font-weight: 850;
 }
 
-.ask-shortcuts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin: 0.75rem 0;
-}
-
-.ask-shortcuts button {
-  min-height: 30px;
-  padding: 0.3rem 0.55rem;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: rgba(255, 252, 246, 0.72);
-  color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 800;
-}
-
 .ask-console article {
+  margin-top: 0.75rem;
   padding: 0.9rem;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -808,7 +918,7 @@ p {
     overflow-x: auto;
   }
 
-  .thinking-stage,
+  .about-stage,
   .work-heading,
   .work-card,
   .focus-hero,
@@ -817,19 +927,17 @@ p {
     grid-template-columns: 1fr;
   }
 
-  .thinking-intro,
+  .about-intro,
   .worlds-copy {
     position: static;
   }
 
   .work-card {
-    position: relative;
-    top: auto;
     min-height: auto;
   }
 
-  .work-image img {
-    min-height: 260px;
+  .work-controls {
+    justify-content: flex-start;
   }
 
   .world-grid,
@@ -853,6 +961,10 @@ p {
 
   .compact-identity {
     left: 0.65rem;
+  }
+
+  .compact-identity span:not(.logo-mark) {
+    display: none;
   }
 
   .hero-name {
@@ -879,6 +991,7 @@ p {
   }
 
   .work-card {
+    grid-template-columns: 1fr;
     padding: 0.75rem;
   }
 

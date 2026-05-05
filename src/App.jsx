@@ -11,7 +11,7 @@ const links = {
 
 const chapters = [
   { id: "identity", label: "Identity" },
-  { id: "thinking", label: "Thinking" },
+  { id: "about", label: "About" },
   { id: "work", label: "Work" },
   { id: "worlds", label: "Worlds" },
   { id: "contact", label: "Contact" },
@@ -152,7 +152,25 @@ const projects = [
   },
 ];
 
-const thinking = [
+const aboutNotes = [
+  {
+    title: "Background",
+    body:
+      "I am a data science and machine learning student at Columbia, building toward work that connects research discipline with useful product surfaces.",
+  },
+  {
+    title: "What I work on",
+    body:
+      "My current center of gravity is biomedical computer vision, GenAI product systems, forecasting, and small tools that make model output easier to inspect.",
+  },
+  {
+    title: "Current focus",
+    body:
+      "I am preparing for Google Maps Navigation Trips forecasting work while continuing research tooling around pathology images and model review.",
+  },
+];
+
+const principles = [
   {
     title: "Make uncertainty visible.",
     body:
@@ -203,13 +221,25 @@ const worlds = [
 
 const guideAnswers = [
   {
+    keywords: ["", "empty"],
+    title: "Ask a little more specifically.",
+    body:
+      "Try asking about a project, research direction, internship framing, creative work, or which piece is strongest for recruiting.",
+  },
+  {
     keywords: ["strong", "strongest", "first", "read", "best"],
     title: "Start with pathology ML.",
     body:
       "It has the strongest technical evidence: data export, validation discipline, metrics, figures, and careful limitations.",
   },
   {
-    keywords: ["travel", "travelmind", "agent", "llm", "genai"],
+    keywords: ["stardist", "segmentation", "nuclei", "nuclear", "viewer"],
+    title: "StarDist shows research-tool judgment.",
+    body:
+      "The strongest angle is not the segmentation count alone. It is the review workflow: making detections visible, shareable, and easier to question.",
+  },
+  {
+    keywords: ["travel", "travelmind", "agent", "llm", "genai", "ai"],
     title: "TravelMind is a product story.",
     body:
       "Its value is the decomposition of an AI workflow into modes, agents, and user-facing outputs. It should not be framed as a live production app.",
@@ -226,7 +256,33 @@ const guideAnswers = [
     body:
       "The right framing is incoming forecasting work, selected for Navigation Trips. Do not claim impact before the internship happens.",
   },
+  {
+    keywords: ["venture", "startup", "visualization", "censoring", "data"],
+    title: "Venture outcomes is about restraint.",
+    body:
+      "It is useful because it refuses easy causal claims. The project shows how to make a data story more honest by foregrounding cohort maturity and survivorship bias.",
+  },
+  {
+    keywords: ["contact", "email", "resume", "linkedin", "github"],
+    title: "Use the ending links.",
+    body:
+      "The contact section has email, resume, GitHub, and LinkedIn in one place. For a recruiter, resume plus pathology ML is the cleanest path.",
+  },
 ];
+
+function getGuideAnswer(question) {
+  const text = question.trim().toLowerCase();
+  if (!text) return guideAnswers[0];
+  return (
+    guideAnswers
+      .slice(1)
+      .find((item) => item.keywords.some((keyword) => text.includes(keyword))) || {
+      title: "Here is the honest read.",
+      body:
+        "This portfolio is strongest when it is read through evidence and process: pathology ML for rigor, StarDist for review tooling, TravelMind for product reasoning, and venture outcomes for careful interpretation.",
+    }
+  );
+}
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
@@ -276,13 +332,13 @@ function useNarrativeMotion() {
   return chapter;
 }
 
-function scrollToChapter(id) {
-  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+function scrollToChapter(id, behavior = "smooth") {
+  document.getElementById(id)?.scrollIntoView({ behavior, block: "start" });
 }
 
 function App() {
   const [focusedProject, setFocusedProject] = useState(null);
-  const [guideAnswer, setGuideAnswer] = useState(guideAnswers[0]);
+  const [guideAnswer, setGuideAnswer] = useState(null);
   const chapter = useNarrativeMotion();
 
   useEffect(() => {
@@ -295,15 +351,32 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const slug = window.location.pathname.startsWith("/projects/")
+    const path = window.location.pathname;
+    const slug = path.startsWith("/projects/")
       ? window.location.pathname.replace("/projects/", "")
       : "";
     const project = projects.find((item) => item.slug === slug);
     if (project) {
       setFocusedProject(project);
       window.history.replaceState({}, "", "/");
-      setTimeout(() => scrollToChapter("work"), 120);
+      setTimeout(() => scrollToChapter("work", "auto"), 120);
+      return;
     }
+
+    const chapterByPath = {
+      "/about": "about",
+      "/projects": "work",
+      "/research": "worlds",
+      "/experience": "worlds",
+      "/creative": "worlds",
+      "/lab": "worlds",
+      "/contact": "contact",
+    };
+    const hashChapter = window.location.hash.replace("#", "");
+    const target = chapters.some((item) => item.id === hashChapter)
+      ? hashChapter
+      : chapterByPath[path];
+    if (target) setTimeout(() => scrollToChapter(target, "auto"), 160);
   }, []);
 
   function openProject(project) {
@@ -348,16 +421,12 @@ function App() {
 
       <main>
         <Landing />
-        <Thinking />
+        <About />
         <SelectedWork onOpenProject={openProject} focusedSlug={focusedProject?.slug} />
         <Worlds
           guideAnswer={guideAnswer}
           onAsk={(question) => {
-            const text = question.toLowerCase();
-            const match =
-              guideAnswers.find((item) => item.keywords.some((keyword) => text.includes(keyword))) ||
-              guideAnswers[0];
-            setGuideAnswer(match);
+            setGuideAnswer(getGuideAnswer(question));
           }}
         />
         <Ending />
@@ -377,9 +446,17 @@ function CompactIdentity({ chapter }) {
       aria-label="Return to opening"
       data-visible={chapter === "identity" ? "false" : "true"}
     >
-      <span>Ruochen</span>
-      <span>Feng</span>
+      <LogoMark />
+      <span>Ruochen Feng</span>
     </button>
+  );
+}
+
+function LogoMark() {
+  return (
+    <span className="logo-mark" aria-hidden="true">
+      RF
+    </span>
   );
 }
 
@@ -407,6 +484,7 @@ function Landing() {
   return (
     <section className="stage landing-stage" id="identity" aria-label="Identity">
       <div className="hero-name-wrap">
+        <LogoMark />
         <p className="stage-kicker">Data science / ML / designed systems</p>
         <h1 className="hero-name">
           <span>Ruochen</span>
@@ -424,66 +502,110 @@ function Landing() {
   );
 }
 
-function Thinking() {
+function About() {
   return (
-    <section className="stage thinking-stage" id="thinking" aria-label="How I build">
-      <div className="chapter-label">01 / How I build</div>
-      <div className="thinking-intro">
-        <h2>ML systems are only useful when people can inspect them.</h2>
+    <section className="stage about-stage" id="about" aria-label="About Ruochen Feng">
+      <div className="chapter-label">01 / About</div>
+      <div className="about-intro">
+        <h2>I sit between ML rigor and the interface where people judge the work.</h2>
         <p>
-          The throughline is not one technique. It is a way of building: expose the
-          assumptions, design the review surface, and keep the claim proportionate to the
-          evidence.
+          I am drawn to systems where the technical result is only half the problem. The
+          other half is whether someone can inspect it, trust its limits, and use it
+          without the model becoming a black box.
         </p>
       </div>
-      <div className="principle-track">
-        {thinking.map((item, index) => (
-          <article className="principle" key={item.title}>
+      <div className="about-body">
+        <div className="about-notes">
+          {aboutNotes.map((item) => (
+            <article className="about-note" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+        <div className="principle-track">
+          {principles.map((item, index) => (
+            <article className="principle" key={item.title}>
             <span>{String(index + 1).padStart(2, "0")}</span>
             <h3>{item.title}</h3>
             <p>{item.body}</p>
           </article>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
 }
 
 function SelectedWork({ onOpenProject, focusedSlug }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeProject = projects[activeIndex];
+
+  function moveProject(direction) {
+    setActiveIndex((index) => (index + direction + projects.length) % projects.length);
+  }
+
   return (
     <section className="stage work-stage" id="work" aria-label="Selected work">
       <div className="chapter-label">02 / Selected work</div>
       <div className="work-heading">
         <h2>Four artifacts, each with a different kind of evidence.</h2>
         <p>
-          The work opens inward: one artifact at a time, with the surrounding page
-          quieting down around the evidence.
+          The carousel keeps the visual rhythm steady, so the differences are in the
+          work itself: research rigor, review tooling, product reasoning, and careful
+          interpretation.
         </p>
       </div>
-      <div className="work-stack">
+      <div className="work-controls" aria-label="Project carousel controls">
+        <button type="button" onClick={() => moveProject(-1)} aria-label="Previous project">
+          Previous
+        </button>
+        <span>
+          {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
+        </span>
+        <button type="button" onClick={() => moveProject(1)} aria-label="Next project">
+          Next
+        </button>
+      </div>
+      <div className="work-carousel" aria-live="polite">
+        <div className="work-rail" style={{ transform: `translate3d(-${activeIndex * 100}%, 0, 0)` }}>
+          {projects.map((project, index) => (
+            <article className="work-slide" key={project.slug} aria-hidden={activeIndex !== index}>
+              <button
+                className="work-card"
+                type="button"
+                tabIndex={activeIndex === index ? 0 : -1}
+                onClick={() => onOpenProject(project)}
+                style={{
+                  viewTransitionName: focusedSlug === project.slug ? "none" : `project-${project.slug}`,
+                }}
+              >
+                <span className="work-count">{String(index + 1).padStart(2, "0")}</span>
+                <span className="work-copy">
+                  <span>{project.type}</span>
+                  <strong>{project.title}</strong>
+                  <em>{project.deck}</em>
+                </span>
+                <span className="work-image">
+                  <img src={project.image} alt="" loading={index === 0 ? "eager" : "lazy"} />
+                </span>
+              </button>
+            </article>
+          ))}
+        </div>
+      </div>
+      <div className="work-dots" aria-label="Choose a project">
         {projects.map((project, index) => (
           <button
-            className="work-card"
             key={project.slug}
             type="button"
-            onClick={() => onOpenProject(project)}
-            style={{
-              "--card-index": index,
-              viewTransitionName: focusedSlug === project.slug ? "none" : `project-${project.slug}`,
-            }}
-          >
-            <span className="work-count">{String(index + 1).padStart(2, "0")}</span>
-            <span className="work-copy">
-              <span>{project.type}</span>
-              <strong>{project.title}</strong>
-              <em>{project.deck}</em>
-            </span>
-            <span className="work-image">
-              <img src={project.image} alt="" loading="lazy" />
-            </span>
-          </button>
+            className={activeIndex === index ? "active" : ""}
+            onClick={() => setActiveIndex(index)}
+            aria-label={`Show ${project.title}`}
+          />
         ))}
       </div>
+      <p className="work-current">{activeProject.title}</p>
     </section>
   );
 }
@@ -516,7 +638,9 @@ function ProjectFocus({ project, onClose }) {
               )}
             </div>
           </div>
-          <img src={project.image} alt="" />
+          <span className="focus-media">
+            <img src={project.image} alt="" />
+          </span>
         </div>
 
         <div className="focus-stats">
@@ -572,7 +696,7 @@ function Worlds({ guideAnswer, onAsk }) {
   const [question, setQuestion] = useState("");
 
   function ask(value) {
-    const finalQuestion = value || question;
+    const finalQuestion = value ?? question;
     setQuestion(finalQuestion);
     onAsk(finalQuestion);
   }
@@ -602,8 +726,8 @@ function Worlds({ guideAnswer, onAsk }) {
 
       <div className="ask-strip">
         <div>
-          <span>Local guide</span>
-          <h3>Ask the portfolio where to look.</h3>
+          <span>Portfolio guide</span>
+          <h3>A small local index of the site.</h3>
         </div>
         <div className="ask-console">
           <div className="ask-input">
@@ -613,24 +737,27 @@ function Worlds({ guideAnswer, onAsk }) {
               onKeyDown={(event) => {
                 if (event.key === "Enter") ask();
               }}
-              placeholder="Try: what is strongest?"
+              placeholder="Ask about projects, research, design, resume..."
               aria-label="Ask the portfolio"
             />
             <button type="button" onClick={() => ask()}>
               Ask
             </button>
           </div>
-          <div className="ask-shortcuts">
-            {["strongest project", "TravelMind scope", "creative side"].map((item) => (
-              <button type="button" key={item} onClick={() => ask(item)}>
-                {item}
-              </button>
-            ))}
-          </div>
-          <article aria-live="polite">
-            <h4>{guideAnswer.title}</h4>
-            <p>{guideAnswer.body}</p>
-          </article>
+          {guideAnswer ? (
+            <article aria-live="polite">
+              <h4>{guideAnswer.title}</h4>
+              <p>{guideAnswer.body}</p>
+            </article>
+          ) : (
+            <article aria-live="polite">
+              <h4>Ask in your own words.</h4>
+              <p>
+                This stays deliberately local: it routes common questions to the most
+                relevant part of the portfolio without pretending to be a full chatbot.
+              </p>
+            </article>
+          )}
         </div>
       </div>
     </section>
