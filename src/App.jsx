@@ -1,1012 +1,667 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
 
-const navItems = [
-  { label: "About", href: "/about" },
-  { label: "Projects", href: "/projects" },
-  { label: "Research", href: "/research" },
-  { label: "Experience", href: "/experience" },
-  { label: "Creative", href: "/creative" },
-  { label: "Lab", href: "/lab" },
-  { label: "Contact", href: "/contact" },
-];
-
-const profileLinks = {
+const links = {
   resume: asset("Feng_Resume.pdf"),
   github: "https://github.com/rf2960",
   linkedin: "https://www.linkedin.com/in/ruochenfeng/",
   email: "mailto:rf2960@columbia.edu",
 };
 
-const projectData = [
+const chapters = [
+  { id: "identity", label: "Identity" },
+  { id: "thinking", label: "Thinking" },
+  { id: "work", label: "Work" },
+  { id: "worlds", label: "Worlds" },
+  { id: "contact", label: "Contact" },
+];
+
+const projects = [
   {
     slug: "pancreas-he-pathology",
     title: "Pancreas H&E Pathology AI",
-    eyebrow: "Biomedical ML",
-    short:
-      "A research-grade computer vision workflow for pancreatic H&E tile classification, built around validation discipline rather than polished claims.",
-    role: "Machine Learning Researcher, Reya Lab",
-    period: "Sep 2025 - present",
-    status: "Research workflow",
-    accent: "sage",
-    tags: ["PyTorch", "QuPath", "Medical CV", "Slide-held-out validation"],
-    heroImage: asset("case-assets/pathology/pipeline_overview.png"),
+    type: "Biomedical ML",
+    deck:
+      "A research-grade computer vision workflow for pancreatic H&E tiles, built around validation discipline and honest model limits.",
+    image: asset("case-assets/pathology/pipeline_overview.png"),
     repo: "https://github.com/rf2960/pancreas-he-pathology",
-    live: null,
-    metrics: [
-      ["43,213", "annotated tiles in the working dataset"],
-      ["39,944", "held-out tile predictions in saved outputs"],
-      ["0.573", "mean tuned tissue macro F1"],
-      ["+0.160", "mean threshold-tuning gain"],
+    artifact: null,
+    stats: [
+      ["43,213", "annotated tiles"],
+      ["39,944", "held-out predictions"],
+      ["0.573", "tuned tissue macro F1"],
     ],
     problem:
-      "Pathology ML is easy to make look simpler than it is. Tiles are correlated by slide, classes are imbalanced, and raw scans cannot be treated like public toy data. The project asked how to package a sensitive research workflow so the technical decisions could be inspected without exposing private data.",
+      "Histopathology data makes easy stories dangerous: tiles are slide-correlated, classes are imbalanced, and raw scans cannot be published casually.",
     built:
-      "I built a public-facing pipeline around QuPath annotation export, tile parsing, WideResNet-50-2 training, class balancing, test-time augmentation, threshold tuning, and reproducibility notes.",
-    approach: [
-      "Used QuPath and Groovy scripts to turn annotated regions into coordinate-aware tile datasets.",
-      "Evaluated with leave-one-slide-out validation to reduce slide leakage.",
-      "Used focal loss, class weighting, balanced sampling, and threshold tuning to make class imbalance visible instead of hiding it.",
-      "Documented data access, model limits, and artifact governance so the public repo remains usable without exposing raw scans.",
-    ],
+      "I built a public workflow around QuPath annotation export, coordinate-aware tile parsing, WideResNet training, leave-one-slide-out validation, threshold tuning, model-card notes, and figure generation.",
     decisions: [
-      "I treated validation design as the main story, not the final metric.",
-      "I kept the raw data and checkpoints out of the repo, but made the workflow inspectable through figures, CSV summaries, and model-card style notes.",
-      "I framed threshold tuning as a useful experiment, not as a clinically validated improvement.",
+      "Make validation design the center of the story.",
+      "Show enough artifacts to make the work inspectable without exposing private data.",
+      "Frame threshold tuning as research evidence, not clinical deployment.",
     ],
     tradeoffs: [
-      "The model is research-grade, not clinically deployable.",
-      "Some classes remain underrepresented, so macro F1 is more honest than accuracy alone.",
-      "The public repo is necessarily lighter than the private working folder.",
+      "The model is research-grade and not clinically deployable.",
+      "Rare classes still make macro F1 more meaningful than accuracy alone.",
     ],
     learned:
-      "The strongest ML work is often the unglamorous part: data export, leakage control, class imbalance, and documentation that makes the result believable.",
+      "The serious part of ML is often the least theatrical part: leakage control, documentation, and deciding what not to claim.",
     gallery: [
-      {
-        src: asset("case-assets/pathology/threshold_tuning_summary.png"),
-        caption: "Threshold tuning summary from saved evaluation outputs.",
-      },
-      {
-        src: asset("case-assets/pathology/example_tile_mosaic.png"),
-        caption: "Representative tile mosaic selected from public examples.",
-      },
-      {
-        src: asset("case-assets/pathology/qupath_to_ml_workflow.png"),
-        caption: "QuPath-to-ML workflow, showing the annotation engineering layer.",
-      },
+      asset("case-assets/pathology/threshold_tuning_summary.png"),
+      asset("case-assets/pathology/qupath_to_ml_workflow.png"),
     ],
   },
   {
     slug: "stardist-nuclear-segmentation",
     title: "StarDist Nuclear Segmentation",
-    eyebrow: "Research tooling",
-    short:
-      "A scale-aware TMA segmentation workflow with an interactive viewer for reviewing nuclei, tiles, and spatial context.",
-    role: "Research tool builder",
-    period: "2025",
-    status: "Viewer available",
-    accent: "blue",
-    tags: ["StarDist", "TensorFlow", "OpenSlide", "WSI review"],
-    heroImage: asset("case-assets/pathology/example_tile_mosaic.png"),
+    type: "Research tooling",
+    deck:
+      "A scale-aware tissue microarray segmentation workflow with a viewer for reviewing nuclei, tiles, and spatial context.",
+    image: asset("case-assets/pathology/example_tile_mosaic.png"),
     repo: "https://github.com/rf2960/stardist-nuclear-segmentation",
-    live: asset("stardist-tma-viewer.html"),
-    metrics: [
+    artifact: asset("stardist-tma-viewer.html"),
+    stats: [
       ["82K+", "nuclear masks"],
-      ["7", "TMA cores in current viewer"],
-      ["20x", "model-normalized inference scale"],
-      ["HTML", "self-contained review artifact"],
+      ["7", "TMA cores"],
+      ["HTML", "review artifact"],
     ],
     problem:
-      "Segmentation output is hard to trust if reviewers only see aggregate counts. This project focused on making nuclear detections inspectable at the tile and core level.",
+      "Segmentation output is hard to trust if reviewers only see aggregate counts.",
     built:
-      "I assembled a viewer-oriented pipeline around OpenSlide ingestion, StarDist inference, stain-gated filtering, overlap cleanup, and interactive HTML review.",
-    approach: [
-      "Normalize scale before inference so the pretrained StarDist model sees expected tissue resolution.",
-      "Deduplicate overlapping tile detections after sliding-window processing.",
-      "Export a lightweight viewer with core navigation, patch grids, and boundary opacity controls.",
-    ],
+      "I assembled OpenSlide ingestion, StarDist inference, stain-gated filtering, overlap cleanup, and a shareable HTML viewer.",
     decisions: [
-      "Prioritized reviewability over pretending the model is automatic truth.",
-      "Kept the viewer self-contained so it can be shared without a local Python environment.",
+      "Treat visual QA as part of the pipeline.",
+      "Keep the viewer self-contained so it can be opened without a local Python setup.",
     ],
     tradeoffs: [
-      "The public viewer is a curated artifact, not the complete private slide collection.",
-      "Segmentation quality still depends on stain quality, core detection, and thresholds.",
+      "The viewer is a curated public artifact, not the complete private slide collection.",
+      "Segmentation still depends on stain quality, thresholds, and core detection.",
     ],
     learned:
-      "For biomedical tools, interface design is part of the science. If reviewers cannot inspect output, the pipeline is not finished.",
-    gallery: [
-      {
-        src: asset("case-assets/pathology/example_tile_mosaic.png"),
-        caption: "Tile-level visual context used for review.",
-      },
-    ],
+      "For biomedical tools, interface design is not cosmetic. It is how reviewers decide whether output is believable.",
+    gallery: [asset("case-assets/pathology/example_tile_mosaic.png")],
   },
   {
     slug: "travelmind",
     title: "TravelMind Planner",
-    eyebrow: "Agentic AI concept",
-    short:
-      "A multi-agent travel-planning concept shown through product screens, architecture diagrams, and a hosted demo walkthrough.",
-    role: "Project lead",
-    period: "Sep 2025 - Dec 2025",
-    status: "Portfolio demo",
-    accent: "ink",
-    tags: ["LLM agents", "Product design", "Architecture", "Demo"],
-    heroImage: asset("case-assets/travelmind/discover_result.png"),
+    type: "Agentic AI concept",
+    deck:
+      "A multi-agent travel-planning concept shown through product screens, architecture artifacts, and a hosted demo walkthrough.",
+    image: asset("case-assets/travelmind/discover_result.png"),
     repo: "https://github.com/rf2960/travelmind-planner",
-    live: asset("travelmind-demo.html"),
-    metrics: [
-      ["2", "core user flows"],
+    artifact: asset("travelmind-demo.html"),
+    stats: [
+      ["2", "user flows"],
       ["5", "planned agent roles"],
-      ["1440p", "hosted walkthrough video"],
-      ["0", "production claims"],
+      ["1440p", "demo walkthrough"],
     ],
     problem:
-      "Travel planning is iterative, preference-heavy, and easy for a single prompt to flatten. The project explored how an LLM product might separate discovery, planning, enrichment, and revision.",
+      "Travel planning is preference-heavy and iterative; a single prompt tends to flatten discovery, planning, and revision into one vague response.",
     built:
-      "The public repo presents the system design, screenshots, architecture pages, and a high-quality demo walkthrough. It is intentionally framed as a concept and portfolio artifact, not a deployed app.",
-    approach: [
-      "Separate destination discovery from existing-plan enhancement.",
-      "Route requests through roles such as ConstraintParser, DestinationRecommender, ItineraryPlanner, DetailEnricher, and PlanEnhancer.",
-      "Use a demo page to make the product flow inspectable without implying a live backend.",
-    ],
+      "I documented a product concept with destination discovery, plan enhancement, architecture diagrams, screenshots, and a high-quality hosted demo page.",
     decisions: [
-      "I chose honest scope over overclaiming: the public artifact shows design and reasoning, not a full code release.",
-      "The demo page lives on this site so viewers can watch the product flow without digging through GitHub folders.",
+      "Separate discovery from existing-plan enhancement.",
+      "Use agent roles to keep the workflow understandable.",
+      "Be explicit that the public artifact is a demo, not a live production app.",
     ],
     tradeoffs: [
-      "Without the full frontend/backend source, this is not a runnable public app.",
-      "The strongest value is product reasoning, system decomposition, and interaction design.",
+      "The public repo does not include a runnable backend/frontend release.",
+      "Its value is product reasoning and system decomposition, not production metrics.",
     ],
     learned:
-      "A good AI product is not just a prompt. It needs constraints, fallbacks, mode boundaries, and a user experience that makes uncertainty manageable.",
+      "A useful AI product needs boundaries: mode separation, fallback thinking, and output that makes assumptions visible.",
     gallery: [
-      {
-        src: asset("case-assets/travelmind/discover_result.png"),
-        caption: "Destination discovery result screen.",
-      },
-      {
-        src: asset("case-assets/travelmind/plan_result.png"),
-        caption: "Existing-plan enhancement result screen.",
-      },
+      asset("case-assets/travelmind/discover_result.png"),
+      asset("case-assets/travelmind/plan_result.png"),
     ],
   },
   {
     slug: "venture-outcomes",
     title: "Venture Outcomes Under Censoring",
-    eyebrow: "Data storytelling",
-    short:
-      "An interactive Crunchbase-style analysis that treats startup outcomes as censored evidence rather than simple success labels.",
-    role: "Analyst and report builder",
-    period: "2025",
-    status: "Live report",
-    accent: "gold",
-    tags: ["Visualization", "Bias framing", "Python", "Interactive report"],
-    heroImage: asset("case-assets/investments/market_exit_fingerprint.svg"),
+    type: "Data storytelling",
+    deck:
+      "An interactive startup-outcomes analysis that treats company status as censored evidence rather than a simple success label.",
+    image: asset("case-assets/investments/market_exit_fingerprint.svg"),
     repo: "https://github.com/rf2960/market-investment-visualization",
-    live: "https://rf2960.github.io/market-investment-visualization/",
-    metrics: [
-      ["2000-2008", "mature cohorts emphasized"],
-      ["SVG", "static preview exports"],
+    artifact: "https://rf2960.github.io/market-investment-visualization/",
+    stats: [
       ["HTML", "published report"],
+      ["SVG", "static exports"],
       ["0", "causal claims"],
     ],
     problem:
-      "Startup status data tempts people into easy rankings, but many companies are still operating because they have not had time to exit or fail. The analysis needed to foreground censoring and survivorship bias.",
+      "Startup data invites misleading rankings because many companies are still operating simply because they have not had enough time to exit or fail.",
     built:
-      "I built an executive-style web report with market exploration, status composition views, and careful language around funding depth and outcome interpretation.",
-    approach: [
-      "Reframed the analysis around time-to-outcome instead of raw status rates.",
-      "Compared mature founding cohorts separately from recent cohorts.",
-      "Generated clean SVG artifacts and a reproducible HTML report from the source data.",
-    ],
+      "I built a report that foregrounds founding cohort, funding depth, market fingerprints, and careful interpretation under survivorship bias.",
     decisions: [
-      "Used descriptive language throughout to avoid implying funding causes success.",
-      "Made the report readable as a story, not just a chart gallery.",
+      "Use mature cohorts for more interpretable comparisons.",
+      "Keep the language descriptive rather than causal.",
+      "Design the report as a guided reading path, not a chart dump.",
     ],
     tradeoffs: [
-      "The dataset is a static snapshot with missingness and self-reporting bias.",
-      "Funding is aggregated at the company level, not modeled as a time series.",
+      "The dataset is static and incomplete.",
+      "Funding is aggregated, not a time-series treatment model.",
     ],
     learned:
-      "Good analytics is often about refusing the most convenient interpretation and building a better frame for the reader.",
+      "Good analysis sometimes means slowing the reader down before they reach the wrong conclusion.",
     gallery: [
-      {
-        src: asset("case-assets/investments/status_composition.svg"),
-        caption: "Status composition view from the published report.",
-      },
-      {
-        src: asset("case-assets/investments/market_exit_fingerprint.svg"),
-        caption: "Market exit fingerprint figure.",
-      },
+      asset("case-assets/investments/status_composition.svg"),
+      asset("case-assets/investments/market_exit_fingerprint.svg"),
     ],
   },
 ];
 
-const experienceItems = [
+const thinking = [
   {
-    org: "Google Maps Navigation Trips",
-    role: "Incoming Data Scientist Intern",
-    time: "June 2026 - Sep 2026",
-    place: "Greater Seattle Area",
+    title: "Make uncertainty visible.",
     body:
-      "Selected for driver-based trip-demand forecasting work involving time-series features, baseline evaluation, dashboards, and Gemini-powered summaries for product-facing insight.",
+      "Whether the system is a pathology classifier or an LLM planner, I want users to see what the model knows, what it assumes, and where the edge cases live.",
   },
   {
-    org: "Reya Lab, Columbia University Irving Medical Center",
-    role: "Machine Learning Researcher",
-    time: "Sep 2025 - present",
-    place: "New York City",
+    title: "Design is part of the method.",
     body:
-      "Building histopathology image-analysis workflows across supervised tile classification, StarDist segmentation, validation design, and interactive review artifacts.",
+      "A viewer, demo, or report is not decoration. It is how other people inspect the work without standing over my shoulder.",
   },
   {
-    org: "VeriSilicon Microelectronics",
-    role: "Data Engineer Intern",
-    time: "Jul 2023 - Sep 2023",
-    place: "Shanghai",
+    title: "Do not overstate the artifact.",
     body:
-      "Built automated reporting and reusable SQL/Python workflows across AWS, Spark, Kafka, ReportLab, and product-analysis datasets.",
-  },
-  {
-    org: "OCBC Bank",
-    role: "Risk Analyst Intern",
-    time: "Apr 2023 - Jun 2023",
-    place: "Shanghai",
-    body:
-      "Worked on SQL exposure tables, Tableau risk monitoring, and Python volatility forecasting for market-risk analysis.",
+      "I would rather make a smaller project feel clear and honest than make it sound larger than it is.",
   },
 ];
 
-const researchItems = [
+const worlds = [
   {
-    title:
-      "Leveraging Mathematical Modelling to Evaluate Malaria Vaccination Roll-Out Strategies in Cameroon",
-    meta: "SSRN preprint",
-    href: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5250090",
+    id: "research",
+    label: "Research",
+    title: "Biomedical ML and mathematical modeling.",
     body:
-      "Age-structured mathematical modelling for vaccination strategy evaluation.",
+      "Research, for me, is the habit of making claims slowly: validate the split, document the data, and keep the limitations in the room.",
   },
   {
-    title:
-      "A Novel Kalman Filter Algorithm Using Stance Detection for an Inertial Navigation System",
-    meta: "Springer chapter",
-    href: "https://link.springer.com/chapter/10.1007/978-981-15-8411-4_260",
+    id: "engineering",
+    label: "Engineering",
+    title: "Pipelines, forecasting, and decision surfaces.",
     body:
-      "A Kalman-filter-based inertial navigation method using stance detection.",
-  },
-];
-
-const thinkingNotes = [
-  {
-    label: "Evidence first",
-    text:
-      "I like artifacts that can be inspected: figures, demos, viewers, CSV summaries, model cards, and architecture notes.",
+      "Earlier internships pushed me toward the practical layer: SQL joins, dashboards, reporting reliability, and models that have to explain themselves.",
   },
   {
-    label: "Systems over prompts",
-    text:
-      "For GenAI work, I care about routing, fallbacks, interface states, and where uncertainty shows up for the user.",
+    id: "creative",
+    label: "Creative",
+    title: "Music, UI taste, and small experiments.",
+    body:
+      "Music and interface design shape the way I build: structure, pacing, restraint, and the tiny details that make something feel humane.",
   },
   {
-    label: "Careful claims",
-    text:
-      "I would rather explain a limitation clearly than make a project sound bigger than it is.",
+    id: "lab",
+    label: "Lab",
+    title: "Questions that are allowed to be unfinished.",
+    body:
+      "Some prototypes are valuable because they reveal a direction. I keep room for experiments that are closer to sketches than products.",
   },
 ];
 
 const guideAnswers = [
   {
-    keywords: ["strong", "strongest", "first", "read"],
-    title: "Best first read",
-    answer:
-      "Start with the pathology ML case note if you want the strongest technical evidence. It has the clearest combination of data engineering, validation choices, metrics, and honest limitations.",
-  },
-  {
-    keywords: ["google", "maps", "forecast", "forecasting", "intern"],
-    title: "Google Maps forecasting",
-    answer:
-      "Ruochen is an incoming Data Scientist Intern on Google Maps Navigation Trips, selected for driver-based trip-demand forecasting. The strongest angle is applied forecasting plus product-facing communication, not a claim of completed Google impact yet.",
-  },
-  {
-    keywords: ["pathology", "medical", "histology", "he", "tile", "research"],
-    title: "Pathology ML",
-    answer:
-      "The pathology work is strongest when framed as a research-grade ML workflow: QuPath export, slide-held-out validation, class imbalance, threshold tuning, and careful public documentation around sensitive data.",
+    keywords: ["strong", "strongest", "first", "read", "best"],
+    title: "Start with pathology ML.",
+    body:
+      "It has the strongest technical evidence: data export, validation discipline, metrics, figures, and careful limitations.",
   },
   {
     keywords: ["travel", "travelmind", "agent", "llm", "genai"],
-    title: "TravelMind",
-    answer:
-      "TravelMind should be presented as a product and architecture demo, not a live production app. Its value is in user-flow thinking, agent decomposition, and honest scope.",
+    title: "TravelMind is a product story.",
+    body:
+      "Its value is the decomposition of an AI workflow into modes, agents, and user-facing outputs. It should not be framed as a live production app.",
   },
   {
     keywords: ["creative", "music", "design", "ui"],
-    title: "Creative side",
-    answer:
-      "The creative page is intentionally light: it positions music, UI taste, and experiments as part of how Ruochen thinks, without pretending they are formal professional credits.",
+    title: "The creative side is a lens.",
+    body:
+      "It is less about formal credits and more about taste: pacing, texture, interface calmness, and editing.",
   },
   {
-    keywords: ["weak", "improve", "next", "portfolio"],
-    title: "Best next improvement",
-    answer:
-      "The highest-leverage next step is adding one or two short written case notes with screenshots and decision logs. A small, honest explanation often feels more senior than another large project card.",
+    keywords: ["google", "forecast", "maps", "intern"],
+    title: "Google Maps is future-facing.",
+    body:
+      "The right framing is incoming forecasting work, selected for Navigation Trips. Do not claim impact before the internship happens.",
   },
 ];
 
-function navigateTo(path) {
-  window.history.pushState({}, "", path);
-  window.dispatchEvent(new PopStateEvent("popstate"));
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
 }
 
-function useRoute() {
-  const [path, setPath] = useState(window.location.pathname);
+function useNarrativeMotion() {
+  const [chapter, setChapter] = useState("identity");
 
   useEffect(() => {
-    const onPop = () => setPath(window.location.pathname);
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+    const root = document.documentElement;
+    const update = () => {
+      const max = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      const progress = clamp(window.scrollY / max, 0, 1);
+      const intro = clamp(window.scrollY / Math.max(1, window.innerHeight * 0.82), 0, 1);
+      root.style.setProperty("--story-progress", progress.toFixed(4));
+      root.style.setProperty("--intro-progress", intro.toFixed(4));
+    };
+
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [path]);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target?.id) setChapter(visible.target.id);
+      },
+      { threshold: [0.28, 0.45, 0.62] },
+    );
 
-  return path;
+    chapters.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  return chapter;
 }
 
-function Link({ href, children, className, ...props }) {
-  const isInternal = href.startsWith("/");
+function scrollToChapter(id) {
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function App() {
+  const [focusedProject, setFocusedProject] = useState(null);
+  const [guideAnswer, setGuideAnswer] = useState(guideAnswers[0]);
+  const chapter = useNarrativeMotion();
+
+  useEffect(() => {
+    document.title = "Ruochen Feng - ML systems, research, and creative tools";
+    const description = document.querySelector('meta[name="description"]');
+    description?.setAttribute(
+      "content",
+      "A continuous portfolio narrative for Ruochen Feng: ML systems, research tooling, GenAI product thinking, creative experiments, and contact.",
+    );
+  }, []);
+
+  useEffect(() => {
+    const slug = window.location.pathname.startsWith("/projects/")
+      ? window.location.pathname.replace("/projects/", "")
+      : "";
+    const project = projects.find((item) => item.slug === slug);
+    if (project) {
+      setFocusedProject(project);
+      window.history.replaceState({}, "", "/");
+      setTimeout(() => scrollToChapter("work"), 120);
+    }
+  }, []);
+
+  function openProject(project) {
+    const run = () => setFocusedProject(project);
+    if (document.startViewTransition) {
+      document.startViewTransition(run);
+    } else {
+      run();
+    }
+  }
+
+  function closeProject() {
+    const run = () => setFocusedProject(null);
+    if (document.startViewTransition) {
+      document.startViewTransition(run);
+    } else {
+      run();
+    }
+  }
+
+  useEffect(() => {
+    if (!focusedProject) return undefined;
+
+    const previousOverflow = document.body.style.overflow;
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") closeProject();
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [focusedProject]);
+
   return (
-    <a
-      href={href}
-      className={className}
-      onClick={(event) => {
-        if (!isInternal || event.metaKey || event.ctrlKey || event.shiftKey) return;
-        event.preventDefault();
-        navigateTo(href);
-      }}
-      {...props}
-    >
-      {children}
-    </a>
-  );
-}
+    <div className="narrative-shell" data-chapter={chapter} data-focus={focusedProject ? "open" : "closed"}>
+      <div className="story-field" aria-hidden="true" />
+      <CompactIdentity chapter={chapter} />
+      <ChapterNav chapter={chapter} />
 
-function Arrow() {
-  return <span aria-hidden="true">-&gt;</span>;
-}
-
-function Header({ route }) {
-  return (
-    <header className="site-header">
-      <Link href="/" className="wordmark" aria-label="Ruochen Feng home">
-        <span>Ruochen</span>
-        <span>Feng</span>
-      </Link>
-      <nav className="site-nav" aria-label="Main navigation">
-        {navItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={route === item.href ? "active" : undefined}
-          >
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-      <a className="nav-resume" href={profileLinks.resume} target="_blank" rel="noreferrer">
-        Resume
-      </a>
-    </header>
-  );
-}
-
-function Shell({ route, children }) {
-  return (
-    <div className="app-shell">
-      <CursorGlow />
-      <Header route={route} />
-      <main className="page-transition" key={route}>
-        {children}
+      <main>
+        <Landing />
+        <Thinking />
+        <SelectedWork onOpenProject={openProject} focusedSlug={focusedProject?.slug} />
+        <Worlds
+          guideAnswer={guideAnswer}
+          onAsk={(question) => {
+            const text = question.toLowerCase();
+            const match =
+              guideAnswers.find((item) => item.keywords.some((keyword) => text.includes(keyword))) ||
+              guideAnswers[0];
+            setGuideAnswer(match);
+          }}
+        />
+        <Ending />
       </main>
+
+      {focusedProject && <ProjectFocus project={focusedProject} onClose={closeProject} />}
     </div>
   );
 }
 
-function CursorGlow() {
-  useEffect(() => {
-    const root = document.documentElement;
-    const onMove = (event) => {
-      root.style.setProperty("--mx", `${event.clientX}px`);
-      root.style.setProperty("--my", `${event.clientY}px`);
-    };
-    window.addEventListener("pointermove", onMove);
-    return () => window.removeEventListener("pointermove", onMove);
-  }, []);
-  return <div className="ambient-glow" aria-hidden="true" />;
+function CompactIdentity({ chapter }) {
+  return (
+    <button
+      className="compact-identity"
+      type="button"
+      onClick={() => scrollToChapter("identity")}
+      aria-label="Return to opening"
+      data-visible={chapter === "identity" ? "false" : "true"}
+    >
+      <span>Ruochen</span>
+      <span>Feng</span>
+    </button>
+  );
 }
 
-function PageHero({ kicker, title, body, children, narrow = false }) {
+function ChapterNav({ chapter }) {
   return (
-    <section className={`page-hero ${narrow ? "narrow" : ""}`}>
-      <p className="kicker">{kicker}</p>
-      <h1>{title}</h1>
-      {body && <p className="hero-body">{body}</p>}
-      {children}
+    <nav className="chapter-nav" aria-label="Narrative sections">
+      {chapters.map((item) => (
+        <button
+          key={item.id}
+          type="button"
+          className={chapter === item.id ? "active" : ""}
+          onClick={() => scrollToChapter(item.id)}
+        >
+          {item.label}
+        </button>
+      ))}
+      <a href={links.resume} target="_blank" rel="noreferrer">
+        Resume
+      </a>
+    </nav>
+  );
+}
+
+function Landing() {
+  return (
+    <section className="stage landing-stage" id="identity" aria-label="Identity">
+      <div className="hero-name-wrap">
+        <p className="stage-kicker">Data science / ML / designed systems</p>
+        <h1 className="hero-name">
+          <span>Ruochen</span>
+          <span>Feng</span>
+        </h1>
+        <p className="identity-line">
+          I build intelligent systems that stay legible, usable, and a little more human.
+        </p>
+      </div>
+      <div className="scroll-cue" aria-hidden="true">
+        <span>Scroll</span>
+        <i />
+      </div>
     </section>
   );
 }
 
-function SectionHeader({ kicker, title, body }) {
+function Thinking() {
   return (
-    <div className="section-header">
-      <p className="kicker">{kicker}</p>
-      <h2>{title}</h2>
-      {body && <p>{body}</p>}
+    <section className="stage thinking-stage" id="thinking" aria-label="How I build">
+      <div className="chapter-label">01 / How I build</div>
+      <div className="thinking-intro">
+        <h2>ML systems are only useful when people can inspect them.</h2>
+        <p>
+          The throughline is not one technique. It is a way of building: expose the
+          assumptions, design the review surface, and keep the claim proportionate to the
+          evidence.
+        </p>
+      </div>
+      <div className="principle-track">
+        {thinking.map((item, index) => (
+          <article className="principle" key={item.title}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SelectedWork({ onOpenProject, focusedSlug }) {
+  return (
+    <section className="stage work-stage" id="work" aria-label="Selected work">
+      <div className="chapter-label">02 / Selected work</div>
+      <div className="work-heading">
+        <h2>Four artifacts, each with a different kind of evidence.</h2>
+        <p>
+          The work opens inward: one artifact at a time, with the surrounding page
+          quieting down around the evidence.
+        </p>
+      </div>
+      <div className="work-stack">
+        {projects.map((project, index) => (
+          <button
+            className="work-card"
+            key={project.slug}
+            type="button"
+            onClick={() => onOpenProject(project)}
+            style={{
+              "--card-index": index,
+              viewTransitionName: focusedSlug === project.slug ? "none" : `project-${project.slug}`,
+            }}
+          >
+            <span className="work-count">{String(index + 1).padStart(2, "0")}</span>
+            <span className="work-copy">
+              <span>{project.type}</span>
+              <strong>{project.title}</strong>
+              <em>{project.deck}</em>
+            </span>
+            <span className="work-image">
+              <img src={project.image} alt="" loading="lazy" />
+            </span>
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProjectFocus({ project, onClose }) {
+  return (
+    <div className="focus-layer" role="dialog" aria-modal="true" aria-labelledby="project-title">
+      <button className="focus-backdrop" type="button" onClick={onClose} aria-label="Close project" />
+      <article className="focus-panel" style={{ viewTransitionName: `project-${project.slug}` }}>
+        <header className="focus-header">
+          <button className="close-button" type="button" onClick={onClose}>
+            Back to flow
+          </button>
+          <p>{project.type}</p>
+        </header>
+        <div className="focus-hero">
+          <div>
+            <h2 id="project-title">{project.title}</h2>
+            <p>{project.deck}</p>
+            <div className="focus-actions">
+              {project.repo && (
+                <a href={project.repo} target="_blank" rel="noreferrer">
+                  GitHub
+                </a>
+              )}
+              {project.artifact && (
+                <a href={project.artifact} target="_blank" rel="noreferrer">
+                  Open artifact
+                </a>
+              )}
+            </div>
+          </div>
+          <img src={project.image} alt="" />
+        </div>
+
+        <div className="focus-stats">
+          {project.stats.map(([value, label]) => (
+            <div key={label}>
+              <strong>{value}</strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="focus-grid">
+          <FocusBlock title="Problem" body={project.problem} />
+          <FocusBlock title="What I built" body={project.built} />
+          <FocusList title="Key decisions" items={project.decisions} />
+          <FocusList title="Tradeoffs" items={project.tradeoffs} />
+          <FocusBlock title="What I learned" body={project.learned} wide />
+        </div>
+
+        <div className="focus-gallery">
+          {project.gallery.map((src) => (
+            <img key={src} src={src} alt="" loading="lazy" />
+          ))}
+        </div>
+      </article>
     </div>
   );
 }
 
-function HomePage() {
-  const selected = projectData.slice(0, 3);
+function FocusBlock({ title, body, wide = false }) {
   return (
-    <>
-      <section className="home-hero">
-        <div className="hero-left">
-          <p className="kicker">Data science, ML, and designed systems</p>
-          <h1>I build intelligent systems that stay legible to people.</h1>
-          <p className="hero-body">
-            I am Ruochen Feng, a Columbia M.S. Data Science student working across
-            forecasting, biomedical image analysis, GenAI product design, and analytical
-            storytelling.
-          </p>
-          <div className="hero-actions">
-            <Link className="button primary" href="/projects">
-              View selected work <Arrow />
-            </Link>
-            <Link className="button ghost" href="/lab">
-              Ask about my work
-            </Link>
-          </div>
-        </div>
-        <aside className="hero-panel" aria-label="Current focus">
-          <div className="panel-line">
-            <span>Currently</span>
-            <strong>incoming Google Maps DS intern</strong>
-          </div>
-          <div className="panel-line">
-            <span>Research</span>
-            <strong>histopathology ML and review tooling</strong>
-          </div>
-          <div className="panel-line">
-            <span>Taste</span>
-            <strong>quiet interfaces, careful claims, usable AI</strong>
-          </div>
-        </aside>
-      </section>
-
-      <section className="section">
-        <SectionHeader
-          kicker="Selected work"
-          title="Projects with something to inspect."
-          body="I prefer work that leaves evidence behind: demos, figures, viewers, notes, and tradeoffs."
-        />
-        <div className="selected-grid">
-          {selected.map((project) => (
-            <ProjectPreview project={project} key={project.slug} />
-          ))}
-        </div>
-      </section>
-
-      <section className="section split-section">
-        <SectionHeader
-          kicker="How I think"
-          title="A small working philosophy."
-          body="The thread across my work is not one domain. It is a way of making uncertain systems easier to inspect."
-        />
-        <div className="note-list">
-          {thinkingNotes.map((note) => (
-            <article className="note-row" key={note.label}>
-              <h3>{note.label}</h3>
-              <p>{note.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="section home-guide">
-        <WorkGuide compact />
-      </section>
-    </>
-  );
-}
-
-function ProjectPreview({ project }) {
-  return (
-    <article className={`project-preview accent-${project.accent}`}>
-      <Link href={`/projects/${project.slug}`} className="image-link">
-        <img src={project.heroImage} alt="" loading="lazy" />
-      </Link>
-      <div>
-        <p className="kicker">{project.eyebrow}</p>
-        <h3>{project.title}</h3>
-        <p>{project.short}</p>
-        <div className="tag-row">
-          {project.tags.slice(0, 3).map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </div>
-        <Link className="text-link" href={`/projects/${project.slug}`}>
-          Read case note <Arrow />
-        </Link>
-      </div>
-    </article>
-  );
-}
-
-function AboutPage() {
-  return (
-    <>
-      <PageHero
-        kicker="About"
-        title="I am drawn to the space between models, interfaces, and evidence."
-        body="My background is math and statistics, but the work I enjoy most asks for more than a model: it needs a usable path from messy data to a decision someone can understand."
-      />
-      <section className="section about-grid">
-        <div className="portrait-card">
-          <img src={asset("ruochen-photo.jpg")} alt="Portrait of Ruochen Feng" />
-        </div>
-        <div className="prose">
-          <p>
-            I am pursuing an M.S. in Data Science at Columbia University after an
-            H.B.Sc. in Mathematics and Statistics with High Distinction from the
-            University of Toronto.
-          </p>
-          <p>
-            My work has moved through financial data pipelines, risk dashboards,
-            forecasting, biomedical image analysis, and GenAI product concepts. I am
-            still early, so I try to make the process visible: what I tried, what I
-            measured, where the limits are, and what I would improve next.
-          </p>
-          <p>
-            Outside the core ML lane, I care about interfaces, typography, music, and
-            the small emotional details that make technical tools feel less hostile.
-          </p>
-        </div>
-      </section>
-      <section className="section">
-        <SectionHeader kicker="Toolkit" title="Tools I use when the work asks for them." />
-        <div className="tool-cloud">
-          {[
-            "Python",
-            "SQL",
-            "PyTorch",
-            "TensorFlow",
-            "scikit-learn",
-            "Spark",
-            "Kafka",
-            "AWS",
-            "GCP Vertex AI",
-            "Tableau",
-            "R",
-            "QuPath",
-            "OpenSlide",
-            "React",
-          ].map((tool) => (
-            <span key={tool}>{tool}</span>
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
-
-function ProjectsPage() {
-  const [activeSlug, setActiveSlug] = useState(projectData[0].slug);
-  const activeProject = projectData.find((project) => project.slug === activeSlug);
-
-  return (
-    <>
-      <PageHero
-        kicker="Projects"
-        title="Not a long shelf. A few artifacts with reasoning inside."
-        body="Each project page is written as a case note: motivation, approach, constraints, and what I learned."
-      />
-      <section className="section project-focus">
-        <div className="focus-tabs" role="tablist" aria-label="Project focus selector">
-          {projectData.map((project) => (
-            <button
-              key={project.slug}
-              type="button"
-              className={project.slug === activeSlug ? "active" : ""}
-              onClick={() => setActiveSlug(project.slug)}
-            >
-              {project.title}
-            </button>
-          ))}
-        </div>
-        {activeProject && (
-          <article className="focus-card">
-            <img src={activeProject.heroImage} alt="" />
-            <div>
-              <p className="kicker">{activeProject.eyebrow}</p>
-              <h2>{activeProject.title}</h2>
-              <p>{activeProject.short}</p>
-              <Link className="button primary" href={`/projects/${activeProject.slug}`}>
-                Open case note <Arrow />
-              </Link>
-            </div>
-          </article>
-        )}
-      </section>
-      <section className="section">
-        <div className="project-list">
-          {projectData.map((project) => (
-            <ProjectPreview project={project} key={project.slug} />
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
-
-function ProjectDetailPage({ slug }) {
-  const project = projectData.find((item) => item.slug === slug);
-
-  if (!project) {
-    return <NotFoundPage />;
-  }
-
-  return (
-    <>
-      <section className={`case-hero accent-${project.accent}`}>
-        <div>
-          <p className="kicker">{project.eyebrow}</p>
-          <h1>{project.title}</h1>
-          <p className="hero-body">{project.short}</p>
-          <div className="case-actions">
-            {project.repo && (
-              <a className="button ghost" href={project.repo} target="_blank" rel="noreferrer">
-                GitHub
-              </a>
-            )}
-            {project.live && (
-              <a className="button primary" href={project.live} target="_blank" rel="noreferrer">
-                Open artifact <Arrow />
-              </a>
-            )}
-          </div>
-        </div>
-        <img src={project.heroImage} alt="" />
-      </section>
-
-      <section className="section case-meta">
-        <div>
-          <span>Role</span>
-          <strong>{project.role}</strong>
-        </div>
-        <div>
-          <span>Period</span>
-          <strong>{project.period}</strong>
-        </div>
-        <div>
-          <span>Status</span>
-          <strong>{project.status}</strong>
-        </div>
-      </section>
-
-      <section className="section metric-grid">
-        {project.metrics.map(([value, label]) => (
-          <article className="metric" key={label}>
-            <strong>{value}</strong>
-            <span>{label}</span>
-          </article>
-        ))}
-      </section>
-
-      <section className="section case-layout">
-        <CaseText title="Problem" body={project.problem} />
-        <CaseText title="What I built" body={project.built} />
-        <CaseList title="Technical approach" items={project.approach} />
-        <CaseList title="Key decisions" items={project.decisions} />
-        <CaseList title="Tradeoffs" items={project.tradeoffs} />
-        <CaseText title="What I learned" body={project.learned} />
-      </section>
-
-      {project.gallery?.length > 0 && (
-        <section className="section">
-          <SectionHeader kicker="Artifacts" title="Visual evidence." />
-          <div className="gallery-grid">
-            {project.gallery.map((item) => (
-              <figure key={item.src}>
-                <img src={item.src} alt="" loading="lazy" />
-                <figcaption>{item.caption}</figcaption>
-              </figure>
-            ))}
-          </div>
-        </section>
-      )}
-    </>
-  );
-}
-
-function CaseText({ title, body }) {
-  return (
-    <article className="case-block">
-      <h2>{title}</h2>
+    <section className={wide ? "focus-block wide" : "focus-block"}>
+      <h3>{title}</h3>
       <p>{body}</p>
-    </article>
+    </section>
   );
 }
 
-function CaseList({ title, items }) {
+function FocusList({ title, items }) {
   return (
-    <article className="case-block">
-      <h2>{title}</h2>
+    <section className="focus-block">
+      <h3>{title}</h3>
       <ul>
         {items.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>
-    </article>
+    </section>
   );
 }
 
-function ResearchPage() {
-  return (
-    <>
-      <PageHero
-        kicker="Research"
-        title="Research work, treated as process instead of decoration."
-        body="This page collects the academic and biomedical side of my work, with an emphasis on careful framing and reproducibility."
-      />
-      <section className="section research-feature">
-        <ProjectPreview project={projectData[0]} />
-        <ProjectPreview project={projectData[1]} />
-      </section>
-      <section className="section">
-        <SectionHeader kicker="Publications" title="Selected writing and papers." />
-        <div className="publication-list">
-          {researchItems.map((item) => (
-            <article className="publication" key={item.title}>
-              <div>
-                <p className="kicker">{item.meta}</p>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </div>
-              <a href={item.href} target="_blank" rel="noreferrer">
-                Open
-              </a>
-            </article>
-          ))}
-        </div>
-      </section>
-    </>
-  );
-}
+function Worlds({ guideAnswer, onAsk }) {
+  const [question, setQuestion] = useState("");
 
-function ExperiencePage() {
-  return (
-    <>
-      <PageHero
-        kicker="Experience"
-        title="A practical path through data systems, forecasting, and model-facing tools."
-        body="I am still early in my career, so this page keeps the emphasis on responsibility, context, and the kind of problems I have touched."
-      />
-      <section className="section timeline">
-        {experienceItems.map((item) => (
-          <article className="timeline-item" key={`${item.org}-${item.time}`}>
-            <div>
-              <span>{item.time}</span>
-              <span>{item.place}</span>
-            </div>
-            <div>
-              <h2>{item.role}</h2>
-              <p className="timeline-org">{item.org}</p>
-              <p>{item.body}</p>
-            </div>
-          </article>
-        ))}
-      </section>
-    </>
-  );
-}
-
-function CreativePage() {
-  return (
-    <>
-      <PageHero
-        kicker="Creative"
-        title="A quieter corner for taste, sound, and interface sketches."
-        body="This is not a second resume. It is a place to acknowledge the creative habits that shape how I build: listening closely, editing, arranging, and caring about texture."
-      />
-      <section className="section creative-grid">
-        <article>
-          <p className="kicker">Music</p>
-          <h2>Production as a way of thinking.</h2>
-          <p>
-            Music teaches structure, pacing, restraint, and the feeling of a small
-            detail becoming the whole mood. I want the technical work to have some of
-            that same care.
-          </p>
-        </article>
-        <article>
-          <p className="kicker">UI</p>
-          <h2>Interfaces should lower the temperature.</h2>
-          <p>
-            I am drawn to tools that make complex work feel calm: clear states,
-            readable hierarchy, and interactions that do not ask the user to fight the
-            system.
-          </p>
-        </article>
-        <article>
-          <p className="kicker">Experiments</p>
-          <h2>Small prototypes are allowed to be unfinished.</h2>
-          <p>
-            Some ideas are valuable because they show a question, not because they
-            become a product. I keep a lab page for that kind of work.
-          </p>
-        </article>
-      </section>
-    </>
-  );
-}
-
-function LabPage() {
-  return (
-    <>
-      <PageHero
-        kicker="Lab"
-        title="A small guide to the work behind the site."
-        body="This local interaction uses curated site data, not an external model. It is meant to help visitors find the right story quickly."
-      />
-      <section className="section">
-        <WorkGuide />
-      </section>
-    </>
-  );
-}
-
-function WorkGuide({ compact = false }) {
-  const [query, setQuery] = useState("");
-  const [active, setActive] = useState(guideAnswers[0]);
-
-  const suggestions = compact
-    ? ["What is strongest?", "Tell me about pathology ML", "Is TravelMind live?"]
-    : [
-        "What is strongest?",
-        "Tell me about pathology ML",
-        "Is TravelMind live?",
-        "How does creativity fit?",
-        "What should I read first?",
-      ];
-
-  function answerQuestion(value) {
-    const text = value.toLowerCase();
-    const found =
-      guideAnswers.find((item) => item.keywords.some((keyword) => text.includes(keyword))) ||
-      guideAnswers.find((item) => item.keywords.includes("weak"));
-    setActive(found);
-    setQuery(value);
+  function ask(value) {
+    const finalQuestion = value || question;
+    setQuestion(finalQuestion);
+    onAsk(finalQuestion);
   }
 
   return (
-    <div className={`work-guide ${compact ? "compact" : ""}`}>
-      <div>
-        <p className="kicker">Distinctive feature</p>
-        <h2>Ask the portfolio.</h2>
-        <p>
-          Try a question about my projects, research, creative side, or what to read
-          first. The answer is generated from curated local notes.
-        </p>
-      </div>
-      <div className="guide-console">
-        <label htmlFor="guide-input">Ask a question</label>
-        <div className="guide-input">
-          <input
-            id="guide-input"
-            value={query}
-            placeholder="e.g. What is the strongest project?"
-            onChange={(event) => setQuery(event.target.value)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter") answerQuestion(query);
-            }}
-          />
-          <button type="button" onClick={() => answerQuestion(query)}>
-            Ask
-          </button>
+    <section className="stage worlds-stage" id="worlds" aria-label="Sub-worlds">
+      <div className="chapter-label">03 / Expansion</div>
+      <div className="worlds-layout">
+        <div className="worlds-copy">
+          <h2>Different rooms, same way of paying attention.</h2>
+          <p>
+            Research, engineering, creative work, and experiments are not separate
+            identities here. They are different lighting on the same question: how do
+            you make complex things easier to understand?
+          </p>
         </div>
-        <div className="suggestions">
-          {suggestions.map((suggestion) => (
-            <button key={suggestion} type="button" onClick={() => answerQuestion(suggestion)}>
-              {suggestion}
-            </button>
+        <div className="world-grid">
+          {worlds.map((world) => (
+            <article key={world.id} className={`world-card ${world.id}`}>
+              <span>{world.label}</span>
+              <h3>{world.title}</h3>
+              <p>{world.body}</p>
+            </article>
           ))}
         </div>
-        <article className="guide-answer" aria-live="polite">
-          <p className="kicker">{active.title}</p>
-          <p>{active.answer}</p>
-        </article>
       </div>
-    </div>
+
+      <div className="ask-strip">
+        <div>
+          <span>Local guide</span>
+          <h3>Ask the portfolio where to look.</h3>
+        </div>
+        <div className="ask-console">
+          <div className="ask-input">
+            <input
+              value={question}
+              onChange={(event) => setQuestion(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") ask();
+              }}
+              placeholder="Try: what is strongest?"
+              aria-label="Ask the portfolio"
+            />
+            <button type="button" onClick={() => ask()}>
+              Ask
+            </button>
+          </div>
+          <div className="ask-shortcuts">
+            {["strongest project", "TravelMind scope", "creative side"].map((item) => (
+              <button type="button" key={item} onClick={() => ask(item)}>
+                {item}
+              </button>
+            ))}
+          </div>
+          <article aria-live="polite">
+            <h4>{guideAnswer.title}</h4>
+            <p>{guideAnswer.body}</p>
+          </article>
+        </div>
+      </div>
+    </section>
   );
 }
 
-function ContactPage() {
+function Ending() {
   return (
-    <>
-      <PageHero
-        kicker="Contact"
-        title="Send the kind of message that starts with a concrete problem."
-        body="I am open to data science, ML, research, product-oriented AI, and collaborative projects where careful thinking matters."
-      />
-      <section className="section contact-grid">
-        <a href={profileLinks.email}>
-          <span>Email</span>
-          <strong>rf2960@columbia.edu</strong>
-        </a>
-        <a href={profileLinks.github} target="_blank" rel="noreferrer">
-          <span>GitHub</span>
-          <strong>github.com/rf2960</strong>
-        </a>
-        <a href={profileLinks.linkedin} target="_blank" rel="noreferrer">
-          <span>LinkedIn</span>
-          <strong>linkedin.com/in/ruochenfeng</strong>
-        </a>
-      </section>
-    </>
+    <section className="stage ending-stage" id="contact" aria-label="Contact">
+      <div className="ending-card">
+        <p className="chapter-label">04 / Contact</p>
+        <h2>Back to the person.</h2>
+        <p>
+          I am open to data science, ML research, product-oriented AI, and small
+          collaborations where careful thinking matters.
+        </p>
+        <div className="ending-links">
+          <a href={links.email}>Email</a>
+          <a href={links.resume} target="_blank" rel="noreferrer">
+            Resume
+          </a>
+          <a href={links.github} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+          <a href={links.linkedin} target="_blank" rel="noreferrer">
+            LinkedIn
+          </a>
+        </div>
+      </div>
+    </section>
   );
-}
-
-function NotFoundPage() {
-  return (
-    <PageHero
-      kicker="404"
-      title="This page is not here."
-      body="The site may have moved the artifact you were looking for."
-    >
-      <Link className="button primary" href="/">
-        Return home
-      </Link>
-    </PageHero>
-  );
-}
-
-function App() {
-  const route = useRoute();
-
-  useEffect(() => {
-    const label =
-      route === "/"
-        ? "Ruochen Feng - Data Science Portfolio"
-        : `Ruochen Feng - ${route.split("/").filter(Boolean).join(" / ")}`;
-    document.title = label;
-    const description = document.querySelector('meta[name="description"]');
-    description?.setAttribute(
-      "content",
-      "Ruochen Feng's portfolio for data science, ML research, GenAI systems, and creative technical work.",
-    );
-  }, [route]);
-
-  const page = useMemo(() => {
-    if (route === "/") return <HomePage />;
-    if (route === "/about") return <AboutPage />;
-    if (route === "/projects") return <ProjectsPage />;
-    if (route.startsWith("/projects/")) {
-      return <ProjectDetailPage slug={route.replace("/projects/", "")} />;
-    }
-    if (route === "/research") return <ResearchPage />;
-    if (route === "/experience") return <ExperiencePage />;
-    if (route === "/creative") return <CreativePage />;
-    if (route === "/lab") return <LabPage />;
-    if (route === "/contact") return <ContactPage />;
-    return <NotFoundPage />;
-  }, [route]);
-
-  return <Shell route={route}>{page}</Shell>;
 }
 
 export default App;

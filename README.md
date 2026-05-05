@@ -2,25 +2,15 @@
 
 A handcrafted personal portfolio for Ruochen Feng, built with React and Vite.
 
-The site is designed as a small editorial system rather than a resume dump. It
-organizes data science, ML research, GenAI product thinking, experience, and
-creative interests into distinct pages with project case notes.
+The site is designed as a continuous narrative experience rather than a resume
+dump or disconnected set of pages. Its flow moves from identity to thinking,
+selected work, project focus, expansion worlds, and contact.
 
 ## Structure
 
 ```text
-/
-/about
-/projects
-/projects/pancreas-he-pathology
-/projects/stardist-nuclear-segmentation
-/projects/travelmind
-/projects/venture-outcomes
-/research
-/experience
-/creative
-/lab
-/contact
+/                      continuous narrative surface
+/projects/:slug        legacy deep links open the matching project focus view
 ```
 
 GitHub Pages fallback support is handled by copying `dist/index.html` to
@@ -28,12 +18,12 @@ GitHub Pages fallback support is handled by copying `dist/index.html` to
 
 ## Features
 
-- Multi-page portfolio with lightweight client-side routing
-- Detailed project case notes with problem, approach, decisions, tradeoffs, and lessons
+- Scroll-based identity transition from full-screen name to compact navigation
+- Selected project stack with immersive focus-mode case notes
+- Reversible project transitions using the browser View Transitions API when available
 - Local "Ask the portfolio" guide powered by curated site notes
-- Project focus interaction on the projects index
 - SEO and Open Graph metadata
-- Responsive editorial layout with accessible links and form controls
+- Responsive narrative layout with accessible links, buttons, and form controls
 
 ## Development
 
