@@ -49,8 +49,8 @@ const projects = [
     learned:
       "Research storytelling has to make the model legible without flattening the uncertainty that makes the work honest.",
     gallery: [
-      asset("research-impact-day-activity.jpg"),
-      asset("research-ai-methods-group.jpg"),
+      asset("research-impact-day-poster.jpg"),
+      asset("research-impact-day-group.jpg"),
     ],
   },
   {
@@ -214,16 +214,16 @@ const publications = [
 
 const researchMoments = [
   {
-    image: asset("research-impact-day-activity.jpg"),
+    image: asset("research-impact-day-poster.jpg"),
     caption: "IHMPE Research & Impact Day 2025",
     note:
       "Poster presentation on mathematical modeling for malaria vaccination roll-out strategies in Cameroon.",
   },
   {
-    image: asset("research-ai-methods-group.jpg"),
-    caption: "AI and mathematical modeling research group",
+    image: asset("research-impact-day-group.jpg"),
+    caption: "Research & impact community",
     note:
-      "A broader research-room moment that connects the modeling work with applied AI methods.",
+      "A small moment from the same research setting, included as context rather than personal branding.",
   },
 ];
 
