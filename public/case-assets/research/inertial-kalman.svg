@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-label="Kalman filter inertial navigation chapter visual">
+  <rect width="1280" height="800" fill="#edf0ed"/>
+  <rect x="78" y="82" width="1124" height="636" rx="10" fill="#fffdf8" stroke="#d2d8d0"/>
+  <text x="130" y="154" font-family="Georgia,serif" font-size="52" font-weight="700" fill="#171614">Inertial navigation filtering</text>
+  <text x="130" y="202" font-family="Arial,sans-serif" font-size="23" font-weight="700" fill="#455d70" letter-spacing="3">SPRINGER CHAPTER / CSPS 2020</text>
+  <path d="M168 542 C304 424 438 482 548 364 C668 234 802 316 916 238 C1012 174 1084 194 1134 164" fill="none" stroke="#171614" stroke-width="5" stroke-linecap="round"/>
+  <path d="M168 542 C312 474 454 506 584 410 C726 304 828 342 946 286 C1032 244 1092 240 1134 222" fill="none" stroke="#6d7b61" stroke-width="8" stroke-linecap="round" opacity=".85"/>
+  <g fill="#455d70">
+    <circle cx="168" cy="542" r="12"/>
+    <circle cx="548" cy="364" r="12"/>
+    <circle cx="916" cy="238" r="12"/>
+    <circle cx="1134" cy="164" r="12"/>
+  </g>
+  <g stroke="#d2d8d0" stroke-width="2">
+    <line x1="154" y1="602" x2="1142" y2="602"/>
+    <line x1="154" y1="244" x2="154" y2="602"/>
+  </g>
+  <g fill="#6f6a61" font-family="Arial,sans-serif" font-size="22">
+    <text x="178" y="648">stance detection</text>
+    <text x="462" y="648">sensor correction</text>
+    <text x="762" y="648">navigation estimate</text>
+  </g>
+</svg>

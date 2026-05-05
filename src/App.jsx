@@ -13,11 +13,46 @@ const chapters = [
   { id: "identity", label: "Identity" },
   { id: "about", label: "About" },
   { id: "work", label: "Work" },
+  { id: "research", label: "Research" },
   { id: "worlds", label: "Worlds" },
   { id: "contact", label: "Contact" },
 ];
 
 const projects = [
+  {
+    slug: "malaria-vaccination-modelling",
+    title: "Malaria Vaccination Roll-out Strategies",
+    type: "Research",
+    status: "Working paper",
+    deck:
+      "A mathematical modeling paper evaluating malaria vaccination roll-out strategies in Cameroon through age-structured transmission dynamics.",
+    image: asset("case-assets/research/malaria-modelling.svg"),
+    repo: null,
+    artifact: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5250090",
+    stats: [
+      ["SSRN", "working paper"],
+      ["25", "pages"],
+      ["2025", "posted"],
+    ],
+    problem:
+      "Vaccination roll-out decisions depend on timing, demographic structure, and transmission dynamics; a single aggregate estimate can hide the strategic tradeoffs.",
+    built:
+      "I contributed to a modeling study that evaluates malaria vaccination strategies for Cameroon, connecting mathematical assumptions to public-health interpretation.",
+    decisions: [
+      "Frame the work as a research paper rather than a software product.",
+      "Show topic, authorship, and research context without overstating policy impact.",
+    ],
+    tradeoffs: [
+      "The public artifact is a working paper, not a deployed health intervention.",
+      "Modeling evidence depends on assumptions, calibration, and sensitivity analysis.",
+    ],
+    learned:
+      "Research storytelling has to make the model legible without flattening the uncertainty that makes the work honest.",
+    gallery: [
+      asset("research-impact-day-poster.jpg"),
+      asset("research-impact-day-group.jpg"),
+    ],
+  },
   {
     slug: "pancreas-he-pathology",
     title: "Pancreas H&E Pathology AI",
@@ -152,6 +187,56 @@ const projects = [
   },
 ];
 
+const publications = [
+  {
+    title: "Leveraging Mathematical Modelling to Evaluate Malaria Vaccination Roll-out Strategies in Cameroon",
+    venue: "SSRN working paper, posted May 13, 2025",
+    tag: "Working paper",
+    authors: "Ruochen Feng, Qing Han, Sarafa A. Iyaniwura, Jude D. Kong",
+    link: "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5250090",
+    description:
+      "A mathematical modeling study evaluating malaria vaccination roll-out strategies in Cameroon, connecting transmission dynamics with public-health decision questions.",
+  },
+  {
+    title: "A Novel Kalman Filter Algorithm Using Stance Detection for an Inertial Navigation System",
+    venue: "Lecture Notes in Electrical Engineering, Springer Singapore, CSPS 2020, pp. 1968-1976",
+    tag: "Conference chapter",
+    authors: "Zhijian Shi, Ruochen Feng, Rui Lin, Gareth Peter Lewis",
+    link: "https://link.springer.com/chapter/10.1007/978-981-15-8411-4_260",
+    description:
+      "A Springer conference chapter on stance-detection-assisted Kalman filtering for inertial navigation estimation.",
+  },
+];
+
+const researchMoments = [
+  {
+    image: asset("research-impact-day-poster.jpg"),
+    caption: "IHMPE Research & Impact Day 2025",
+    note:
+      "Poster presentation on mathematical modeling for malaria vaccination roll-out strategies in Cameroon.",
+  },
+  {
+    image: asset("research-impact-day-group.jpg"),
+    caption: "Research & impact community",
+    note:
+      "A small moment from the same research setting, included as context rather than personal branding.",
+  },
+];
+
+const ongoingWork = {
+  title: "AI Organoid Counter",
+  tag: "Ongoing",
+  image: asset("case-assets/research/organoid-counter.svg"),
+  link: "https://github.com/ReyaLab/AI_Organoid_Counter",
+  description:
+    "An in-progress Python tool that uses a fine-tuned SegFormer segmentation model to count organoids in brightfield microscopy images.",
+  details: [
+    "Batch-oriented analysis for folders of microscopy images.",
+    "GUI workflow built around model selection, tiling, masks, and spreadsheet outputs.",
+    "Public repo remains active and intentionally framed as research tooling in progress.",
+  ],
+};
+
 const aboutNotes = [
   {
     title: "Background",
@@ -231,6 +316,24 @@ const guideAnswers = [
     title: "Start with pathology ML.",
     body:
       "It has the strongest technical evidence: data export, validation discipline, metrics, figures, and careful limitations.",
+  },
+  {
+    keywords: ["paper", "publication", "ssrn", "malaria", "cameroon", "vaccine", "vaccination"],
+    title: "The malaria modeling paper is the clean research signal.",
+    body:
+      "It belongs in both Selected Work and Research because it shows authorship, mathematical modeling, and public-health framing without pretending to be a software project.",
+  },
+  {
+    keywords: ["springer", "kalman", "inertial", "navigation", "stance"],
+    title: "The Springer chapter adds publication history.",
+    body:
+      "It is best framed as a conference chapter in Lecture Notes in Electrical Engineering, separate from current ML work but useful for research credibility.",
+  },
+  {
+    keywords: ["organoid", "organic", "counter", "segformer", "ongoing"],
+    title: "Organoid Counter is ongoing research tooling.",
+    body:
+      "It should read as active iteration: segmentation-assisted microscopy counting, GUI workflow, and batch analysis for research use.",
   },
   {
     keywords: ["stardist", "segmentation", "nuclei", "nuclear", "viewer"],
@@ -366,7 +469,8 @@ function App() {
     const chapterByPath = {
       "/about": "about",
       "/projects": "work",
-      "/research": "worlds",
+      "/research": "research",
+      "/publications": "research",
       "/experience": "worlds",
       "/creative": "worlds",
       "/lab": "worlds",
@@ -423,6 +527,7 @@ function App() {
         <Landing />
         <About />
         <SelectedWork onOpenProject={openProject} focusedSlug={focusedProject?.slug} />
+        <Research />
         <Worlds
           guideAnswer={guideAnswer}
           onAsk={(question) => {
@@ -549,11 +654,11 @@ function SelectedWork({ onOpenProject, focusedSlug }) {
     <section className="stage work-stage" id="work" aria-label="Selected work">
       <div className="chapter-label">02 / Selected work</div>
       <div className="work-heading">
-        <h2>Four artifacts, each with a different kind of evidence.</h2>
+        <h2>Five artifacts, each with a different kind of evidence.</h2>
         <p>
           The carousel keeps the visual rhythm steady, so the differences are in the
-          work itself: research rigor, review tooling, product reasoning, and careful
-          interpretation.
+          work itself: publications, research rigor, review tooling, product reasoning,
+          and careful interpretation.
         </p>
       </div>
       <div className="work-controls" aria-label="Project carousel controls">
@@ -692,6 +797,81 @@ function FocusList({ title, items }) {
   );
 }
 
+function Research() {
+  return (
+    <section className="stage research-stage" id="research" aria-label="Research and publications">
+      <div className="chapter-label">03 / Research</div>
+      <div className="research-layout">
+        <div className="research-intro">
+          <h2>Research presence, kept precise.</h2>
+          <p>
+            This section separates papers and research activity from product demos. The
+            signal is intentionally academic: title, venue, authorship, context, and a
+            direct path to the paper.
+          </p>
+        </div>
+        <div className="publication-list">
+          {publications.map((paper) => (
+            <article className="publication" key={paper.title}>
+              <span>{paper.tag}</span>
+              <h3>{paper.title}</h3>
+              <p className="publication-authors">{paper.authors}</p>
+              <p>{paper.description}</p>
+              <div className="publication-meta">
+                <small>{paper.venue}</small>
+                <a href={paper.link} target="_blank" rel="noreferrer">
+                  Open paper
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div className="research-moment">
+        <div>
+          <span>Activity highlight</span>
+          <h3>IHMPE Research & Impact Day 2025</h3>
+          <p>
+            A real-world research moment around the malaria vaccination modeling work,
+            included quietly so the portfolio has evidence of activity beyond code repos.
+          </p>
+        </div>
+        <div className="moment-gallery">
+          {researchMoments.map((moment) => (
+            <figure key={moment.image}>
+              <img src={moment.image} alt={moment.caption} loading="lazy" />
+              <figcaption>
+                <strong>{moment.caption}</strong>
+                <span>{moment.note}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <article className="ongoing-card">
+        <div>
+          <span>{ongoingWork.tag}</span>
+          <h3>{ongoingWork.title}</h3>
+          <p>{ongoingWork.description}</p>
+          <ul>
+            {ongoingWork.details.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <a href={ongoingWork.link} target="_blank" rel="noreferrer">
+            GitHub
+          </a>
+        </div>
+        <span className="ongoing-media">
+          <img src={ongoingWork.image} alt="" loading="lazy" />
+        </span>
+      </article>
+    </section>
+  );
+}
+
 function Worlds({ guideAnswer, onAsk }) {
   const [question, setQuestion] = useState("");
 
@@ -703,7 +883,7 @@ function Worlds({ guideAnswer, onAsk }) {
 
   return (
     <section className="stage worlds-stage" id="worlds" aria-label="Sub-worlds">
-      <div className="chapter-label">03 / Expansion</div>
+      <div className="chapter-label">04 / Expansion</div>
       <div className="worlds-layout">
         <div className="worlds-copy">
           <h2>Different rooms, same way of paying attention.</h2>
@@ -768,7 +948,7 @@ function Ending() {
   return (
     <section className="stage ending-stage" id="contact" aria-label="Contact">
       <div className="ending-card">
-        <p className="chapter-label">04 / Contact</p>
+        <p className="chapter-label">05 / Contact</p>
         <h2>Back to the person.</h2>
         <p>
           I am open to data science, ML research, product-oriented AI, and small

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" role="img" aria-label="Malaria vaccination modeling paper visual">
+  <rect width="1280" height="800" fill="#f7f2e8"/>
+  <rect x="72" y="72" width="1136" height="656" rx="10" fill="#fffdf8" stroke="#d8d0c4"/>
+  <text x="128" y="146" font-family="Georgia,serif" font-size="54" font-weight="700" fill="#171614">Malaria vaccination strategy modeling</text>
+  <text x="128" y="196" font-family="Arial,sans-serif" font-size="24" font-weight="700" fill="#6d7b61" letter-spacing="3">WORKING PAPER / SSRN</text>
+  <g fill="none" stroke-width="8" stroke-linecap="round">
+    <path d="M152 536 C232 424 298 482 382 382 S534 302 636 386 S816 514 960 304" stroke="#6d7b61"/>
+    <path d="M152 586 C244 512 322 552 418 486 S590 428 706 516 S870 612 1072 438" stroke="#455d70"/>
+    <path d="M152 636 C278 594 392 622 516 568 S770 518 1088 552" stroke="#9c7447"/>
+  </g>
+  <g fill="#171614">
+    <circle cx="382" cy="382" r="11"/>
+    <circle cx="636" cy="386" r="11"/>
+    <circle cx="960" cy="304" r="11"/>
+  </g>
+  <g fill="#6f6a61" font-family="Arial,sans-serif" font-size="20">
+    <text x="152" y="690">age-structured transmission</text>
+    <text x="462" y="690">booster timing</text>
+    <text x="738" y="690">regional rollout</text>
+  </g>
+  <g stroke="#d8d0c4" stroke-width="2">
+    <line x1="128" y1="650" x2="1120" y2="650"/>
+    <line x1="128" y1="250" x2="128" y2="650"/>
+  </g>
+</svg>

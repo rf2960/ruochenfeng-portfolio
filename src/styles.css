@@ -215,6 +215,9 @@ img {
 .work-copy > span,
 .world-card > span,
 .ask-strip span,
+.publication > span,
+.research-moment > div > span,
+.ongoing-card > div > span,
 .focus-header p {
   margin: 0;
   color: var(--accent);
@@ -501,23 +504,27 @@ p {
 .work-image {
   overflow: hidden;
   align-self: center;
-  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #e7e1d7;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 246, 0.92), rgba(237, 240, 237, 0.82));
 }
 
 .work-image img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.01);
+  padding: 0.55rem;
+  object-fit: contain;
+  transform: scale(1);
   transition: transform 700ms ease;
 }
 
 .work-card:hover .work-image img {
-  transform: scale(1.045);
+  transform: scale(1.025);
 }
 
 .work-dots {
@@ -637,17 +644,19 @@ p {
   display: block;
   overflow: hidden;
   align-self: end;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   border: 1px solid var(--line);
   border-radius: 8px;
-  background: #e7e1d7;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 246, 0.92), rgba(237, 240, 237, 0.82));
 }
 
 .focus-media img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  padding: 0.55rem;
+  object-fit: contain;
 }
 
 .focus-actions {
@@ -741,11 +750,193 @@ p {
 
 .focus-gallery img {
   width: 100%;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #e7e1d7;
+}
+
+.research-stage {
+  min-height: 100svh;
+}
+
+.research-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.research-intro {
+  position: sticky;
+  top: 7rem;
+}
+
+.research-intro p {
+  max-width: 560px;
+  font-size: 1.08rem;
+}
+
+.publication-list {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.publication {
+  padding: 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 252, 246, 0.68);
+  box-shadow: 0 18px 46px rgba(41, 34, 26, 0.045);
+}
+
+.publication h3 {
+  margin-top: 1.5rem;
+  font-size: 1.75rem;
+  line-height: 1.08;
+}
+
+.publication-authors {
+  margin: 0.65rem 0 0;
+  color: var(--ink);
+  font-weight: 760;
+}
+
+.publication-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.publication-meta small {
+  max-width: 560px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.publication-meta a,
+.ongoing-card a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 0.52rem 0.78rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 252, 246, 0.74);
+  font-size: 0.82rem;
+  font-weight: 840;
+}
+
+.publication-meta a:hover,
+.ongoing-card a:hover {
+  border-color: var(--line-strong);
+  background: #fffdf8;
+}
+
+.research-moment {
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(0, 1.38fr);
+  gap: 1rem;
+  margin-top: 4rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 252, 246, 0.62);
+}
+
+.research-moment h3 {
+  margin-top: 1.2rem;
+  font-size: 2rem;
+}
+
+.moment-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+figure {
+  margin: 0;
+}
+
+.moment-gallery figure {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fffdf8;
+}
+
+.moment-gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-bottom: 1px solid var(--line);
+}
+
+.moment-gallery figcaption {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+}
+
+.moment-gallery figcaption strong {
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1rem;
+}
+
+.moment-gallery figcaption span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.ongoing-card {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(300px, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, rgba(255, 252, 246, 0.82), rgba(240, 232, 220, 0.62));
+  box-shadow: var(--shadow);
+}
+
+.ongoing-card h3 {
+  margin-top: 1.2rem;
+  font-size: 2.4rem;
+}
+
+.ongoing-card li {
+  color: var(--muted);
+  line-height: 1.62;
+}
+
+.ongoing-media {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 252, 246, 0.74);
+}
+
+.ongoing-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0.55rem;
+  object-fit: contain;
 }
 
 .worlds-stage {
@@ -922,12 +1113,16 @@ p {
   .work-heading,
   .work-card,
   .focus-hero,
+  .research-layout,
+  .research-moment,
+  .ongoing-card,
   .worlds-layout,
   .ask-strip {
     grid-template-columns: 1fr;
   }
 
   .about-intro,
+  .research-intro,
   .worlds-copy {
     position: static;
   }
@@ -941,6 +1136,7 @@ p {
   }
 
   .world-grid,
+  .moment-gallery,
   .focus-stats,
   .focus-grid,
   .focus-gallery {
@@ -993,6 +1189,17 @@ p {
   .work-card {
     grid-template-columns: 1fr;
     padding: 0.75rem;
+  }
+
+  .publication,
+  .research-moment,
+  .ongoing-card {
+    padding: 0.85rem;
+  }
+
+  .publication h3,
+  .ongoing-card h3 {
+    font-size: 1.65rem;
   }
 
   .work-copy strong {
