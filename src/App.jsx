@@ -93,7 +93,7 @@ const projects = [
     type: "Research tooling",
     deck:
       "A scale-aware tissue microarray segmentation workflow with a viewer for reviewing nuclei, tiles, and spatial context.",
-    image: asset("case-assets/pathology/stardist-selected-patch-core1-r3-c2.png"),
+    image: asset("case-assets/pathology/stardist-7-cores-overview.png"),
     repo: "https://github.com/rf2960/stardist-nuclear-segmentation",
     artifact: asset("stardist-tma-viewer.html"),
     stats: [
@@ -116,8 +116,8 @@ const projects = [
     learned:
       "For biomedical tools, interface design is not cosmetic. It is how reviewers decide whether output is believable.",
     gallery: [
+      asset("case-assets/pathology/stardist-patch-grid-core1.png"),
       asset("case-assets/pathology/stardist-selected-patch-core1-r3-c2.png"),
-      asset("case-assets/pathology/example_tile_mosaic.png"),
     ],
   },
   {
@@ -150,7 +150,6 @@ const projects = [
     learned:
       "A useful AI product needs boundaries: mode separation, fallback thinking, and output that makes assumptions visible.",
     gallery: [
-      asset("case-assets/travelmind/travelmind-homepage.png"),
       asset("case-assets/travelmind/discover_result.png"),
       asset("case-assets/travelmind/plan_result.png"),
     ],
@@ -184,10 +183,7 @@ const projects = [
     ],
     learned:
       "Good analysis sometimes means slowing the reader down before they reach the wrong conclusion.",
-    gallery: [
-      asset("case-assets/investments/status_composition.svg"),
-      asset("case-assets/investments/market_exit_fingerprint.svg"),
-    ],
+    gallery: [asset("case-assets/investments/status_composition.svg")],
   },
 ];
 
