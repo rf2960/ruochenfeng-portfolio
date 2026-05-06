@@ -213,13 +213,13 @@ const publications = [
 
 const researchMoments = [
   {
-    image: asset("research-impact-day-poster.jpg"),
+    image: asset("research-activity-poster.jpg"),
     caption: "IHMPE Research & Impact Day 2025",
     note:
       "Poster presentation on mathematical modeling for malaria vaccination roll-out strategies in Cameroon.",
   },
   {
-    image: asset("research-impact-day-group.jpg"),
+    image: asset("research-activity-group.jpg"),
     caption: "Research & impact community",
     note:
       "A small moment from the same research setting, included as context rather than personal branding.",
