@@ -1,0 +1,60 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900' role='img'>
+  <defs>
+    <linearGradient id='bg' x1='0' x2='1' y1='0' y2='1'><stop offset='0' stop-color='#eef5f4'/><stop offset='1' stop-color='#f7f4ee'/></linearGradient>
+    <filter id='shadow' x='-20%' y='-20%' width='140%' height='140%'><feDropShadow dx='0' dy='18' stdDeviation='18' flood-color='#1c2a2d' flood-opacity='0.12'/></filter>
+  </defs>
+  <rect width='1600' height='900' fill='url(#bg)'/>
+  <style>
+    .k{font-family:Inter,Manrope,Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:4px;fill:#6d7b61;text-transform:uppercase}
+    .h{font-family:Georgia,serif;font-size:64px;font-weight:700;fill:#171614}
+    .sub{font-family:Inter,Manrope,Arial,sans-serif;font-size:25px;fill:#66706a}
+    .card{fill:#fffdf8;stroke:#d7d0c4;filter:url(#shadow)}
+    .label{font-family:Inter,Manrope,Arial,sans-serif;font-size:20px;font-weight:800;fill:#637068}
+    .body{font-family:Inter,Manrope,Arial,sans-serif;font-size:24px;fill:#242422}
+    .muted{font-family:Inter,Manrope,Arial,sans-serif;font-size:20px;fill:#6f6a61}
+    .num{font-family:Georgia,serif;font-size:58px;font-weight:700;fill:#171614}
+  </style>
+
+  <text x='90' y='90' class='k'>Evaluation Lab</text>
+  <text x='90' y='165' class='h'>Demo metrics and RAG tests</text>
+  <text x='90' y='215' class='sub'>Computed from bundled historical sample and rag_eval_results.json</text>
+  <rect x='90' y='270' width='990' height='500' rx='22' class='card'/>
+  
+      <text x='115' y='340' class='body'>Multi-Agent RAG ? 5d</text>
+      <rect x='430' y='312' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='312' width='330' height='28' rx='14' fill='#2b7a78'/>
+      <text x='900' y='340' class='muted'>75% hit ? 4 signals</text>
+    
+      <text x='115' y='410' class='body'>Sentiment ? 5d</text>
+      <rect x='430' y='382' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='382' width='110' height='28' rx='14' fill='#8b9995'/>
+      <text x='900' y='410' class='muted'>25% hit ? 4 signals</text>
+    
+      <text x='115' y='480' class='body'>Random ? 5d</text>
+      <rect x='430' y='452' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='452' width='110' height='28' rx='14' fill='#c9b8a3'/>
+      <text x='900' y='480' class='muted'>25% hit ? 4 signals</text>
+    
+      <text x='115' y='550' class='body'>Multi-Agent RAG ? 20d</text>
+      <rect x='430' y='522' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='522' width='440' height='28' rx='14' fill='#2b7a78'/>
+      <text x='900' y='550' class='muted'>100% hit ? 2 signals</text>
+    
+      <text x='115' y='620' class='body'>Sentiment ? 20d</text>
+      <rect x='430' y='592' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='592' width='0' height='28' rx='14' fill='#8b9995'/>
+      <text x='900' y='620' class='muted'>0% hit ? 2 signals</text>
+    
+      <text x='115' y='690' class='body'>Random ? 20d</text>
+      <rect x='430' y='662' width='440' height='28' rx='14' fill='#e4e8e4'/>
+      <rect x='430' y='662' width='0' height='28' rx='14' fill='#c9b8a3'/>
+      <text x='900' y='690' class='muted'>0% hit ? 2 signals</text>
+    
+  <rect x='1130' y='270' width='360' height='500' rx='22' class='card'/>
+  <text x='1170' y='340' class='label'>RAG quality tests</text>
+  <text x='1170' y='425' class='num'>9/9</text>
+  <text x='1170' y='472' class='muted'>tickers passed</text>
+  <text x='1170' y='560' class='body'>Retrieval 84</text>
+  <text x='1170' y='610' class='body'>Generation 79</text>
+  <text x='1170' y='675' class='muted'>Scores are project evaluation checks, not trading performance claims.</text>
+</svg>

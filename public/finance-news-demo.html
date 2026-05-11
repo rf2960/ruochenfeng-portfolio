@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Finance News Analyzer Demo</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --paper: #f7f4ee;
+        --ink: #171614;
+        --muted: #6f6a61;
+        --line: rgba(42, 36, 28, 0.16);
+        --accent: #6d7b61;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: Inter, Manrope, system-ui, sans-serif;
+        color: var(--ink);
+        background:
+          linear-gradient(120deg, rgba(109, 123, 97, 0.12), transparent 34%),
+          linear-gradient(245deg, rgba(69, 93, 112, 0.1), transparent 42%),
+          var(--paper);
+      }
+
+      main {
+        width: min(1160px, calc(100% - 2rem));
+        margin: 0 auto;
+        padding: 5rem 0;
+      }
+
+      header {
+        display: grid;
+        gap: 1rem;
+        max-width: 760px;
+        margin-bottom: 2rem;
+      }
+
+      small {
+        color: var(--accent);
+        font-size: 0.75rem;
+        font-weight: 850;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-family: Georgia, serif;
+        font-size: clamp(3rem, 8vw, 5.4rem);
+        line-height: 0.96;
+      }
+
+      p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.1rem;
+        line-height: 1.7;
+      }
+
+      .links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+      }
+
+      a {
+        display: inline-flex;
+        min-height: 42px;
+        align-items: center;
+        justify-content: center;
+        padding: 0.65rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--ink);
+        background: rgba(255, 252, 246, 0.72);
+        font-weight: 820;
+        text-decoration: none;
+      }
+
+      section {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.1rem;
+      }
+
+      figure {
+        margin: 0;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffdf8;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+
+      figcaption {
+        padding: 0.85rem 1rem 1rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <small>FinSight RAG demo</small>
+        <h1>Finance News Analyzer</h1>
+        <p>
+          Static demo views generated from the local Streamlit project data:
+          saved signal packets, citation audit fields, RAG quality results,
+          and the system architecture.
+        </p>
+        <div class="links">
+          <a href="https://github.com/rf2960/finance-news-analyzer">GitHub</a>
+          <a href="/case-assets/finance/finsight-final-report.pdf">Final report</a>
+        </div>
+      </header>
+
+      <section>
+        <figure>
+          <img src="/case-assets/finance/finsight-live-analysis-demo.svg" alt="FinSight RAG live analysis signal packet" />
+          <figcaption>Live Analysis: ticker-level signal packet with direction, confidence, source quality, and agent trace.</figcaption>
+        </figure>
+        <figure>
+          <img src="/case-assets/finance/finsight-evidence-audit-demo.svg" alt="FinSight RAG evidence audit" />
+          <figcaption>Evidence Audit: citations and agent path kept close to the generated thesis.</figcaption>
+        </figure>
+        <figure>
+          <img src="/case-assets/finance/finsight-evaluation-demo.svg" alt="FinSight RAG evaluation lab" />
+          <figcaption>Evaluation Lab: forward-return sample metrics and RAG quality checks from bundled demo data.</figcaption>
+        </figure>
+        <figure>
+          <img src="/case-assets/finance/finsight-system-architecture-web.png" alt="FinSight RAG system architecture" />
+          <figcaption>System architecture: ingestion, retrieval, agent workflow, output packet, and evaluation layer.</figcaption>
+        </figure>
+      </section>
+    </main>
+  </body>
+</html>

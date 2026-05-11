@@ -128,7 +128,8 @@ const projects = [
       "A Streamlit system that turns ticker-level financial news into cited short-horizon signal packets.",
     image: asset("case-assets/finance/finsight-rag-cover.svg"),
     repo: "https://github.com/rf2960/finance-news-analyzer",
-    artifact: null,
+    artifact: asset("finance-news-demo.html"),
+    report: asset("case-assets/finance/finsight-final-report.pdf"),
     tags: ["RAG", "Agent Workflow", "LLM", "Financial News", "Retrieval"],
     stats: [
       ["3", "agent stages"],
@@ -153,17 +154,19 @@ const projects = [
     learned:
       "RAG is most useful here when it makes sources, counter-evidence, and evaluation visible, not when it simply summarizes headlines.",
     demo:
-      "Demo placeholder: add screenshots or a short walkthrough showing ticker input, retrieved articles, evidence audit, agent trace, and the final financial insight summary.",
+      "The demo is a local Streamlit dashboard. The linked static demo page uses saved project data to show Live Analysis, Evidence Audit, Evaluation Lab, and the system architecture.",
     future: [
-      "Add a hosted demo or short video walkthrough.",
+      "Deploy the Streamlit demo or add a short walkthrough video.",
       "Replace TF-IDF retrieval with FAISS or Chroma for dense retrieval experiments.",
       "Improve citation grounding and source verification.",
       "Add sentiment, risk-event, and ticker-level monitoring views.",
       "Evaluate retrieval quality on a larger live-data sample.",
     ],
     gallery: [
+      asset("case-assets/finance/finsight-live-analysis-demo.svg"),
+      asset("case-assets/finance/finsight-evidence-audit-demo.svg"),
+      asset("case-assets/finance/finsight-evaluation-demo.svg"),
       asset("case-assets/finance/finsight-system-architecture-web.png"),
-      asset("case-assets/finance/finsight-demo-placeholder.svg"),
     ],
   },
   {
@@ -810,6 +813,11 @@ function ProjectFocus({ project, onClose }) {
               {project.artifact && (
                 <a href={project.artifact} target="_blank" rel="noreferrer">
                   Open artifact
+                </a>
+              )}
+              {project.report && (
+                <a href={project.report} target="_blank" rel="noreferrer">
+                  Report
                 </a>
               )}
             </div>
